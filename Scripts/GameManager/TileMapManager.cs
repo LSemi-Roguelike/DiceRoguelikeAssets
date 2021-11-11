@@ -8,10 +8,11 @@ public class TileMapManager : MonoBehaviour
     public static TileMapManager manager;
 
     [SerializeField]
-    Tilemap groudTileMap, unitTileMap;
+    Tilemap groudTileMap, unitTileMap, trapTileMap;
 
     GameObject[][] groundTileArray;
     GameObject[][] unitTileArray;
+    GameObject[][] trapTileArray;
 
     int x_anchor, y_anchor, x_size, y_size;
 
@@ -46,11 +47,13 @@ public class TileMapManager : MonoBehaviour
 
         groundTileArray = new GameObject[x_size][];
         unitTileArray = new GameObject[x_size][];
+        trapTileArray = new GameObject[x_size][];
 
         for (int i = 0; i < x_size; i++)
         {
             groundTileArray[i] = new GameObject[y_size];
             unitTileArray[i] = new GameObject[y_size];
+            trapTileArray[i] = new GameObject[y_size];
         }
 
         for (int i = 0; i < tileCount; i++)
@@ -65,6 +68,12 @@ public class TileMapManager : MonoBehaviour
             Transform child = unitTileMap.transform.GetChild(i);
             Vector3Int pos = WorldToCell(child.position);
             unitTileArray[pos.x + x_anchor][pos.y + y_anchor] = child.gameObject;
+        }
+        for (int i = 0; i < trapTileMap.transform.childCount; i++)
+        {
+            Transform child = trapTileMap.transform.GetChild(i);
+            Vector3Int pos = WorldToCell(child.position);
+            trapTileArray[pos.x + x_anchor][pos.y + y_anchor] = child.gameObject;
         }
     }
 
@@ -97,6 +106,26 @@ public class TileMapManager : MonoBehaviour
         return unitTileArray[pos.x + x_anchor][pos.y + y_anchor];
     }
 
+    public void SetUnitTile(Vector3Int pos, GameObject unit)
+    {
+        if (!IsPosAvail(pos))
+            return;
+        unitTileArray[pos.x + x_anchor][pos.y + y_anchor] = unit;
+    }
+
+    public GameObject GetTrapTile(Vector3Int pos)
+    {
+        if (!IsPosAvail(pos))return null;
+
+        return trapTileArray[pos.x + x_anchor][pos.y + y_anchor];
+    }
+    public void SetTrapTile(Vector3Int pos, GameObject trap)
+    {
+        if (!IsPosAvail(pos))
+            return;
+
+        trapTileArray[pos.x + x_anchor][pos.y + y_anchor] = trap;
+    }
 
     public bool MoveUnit(Vector3Int origin, Vector3Int target)
     {
@@ -123,9 +152,8 @@ public class TileMapManager : MonoBehaviour
         return unitTileArray[pos.x + x_anchor][pos.y + y_anchor] == null && groundTileArray[pos.x + x_anchor][pos.y + y_anchor] != null;
     }
 
-    public List<Route> GetMoveableTiles(Vector3Int pos, int maxDist, bool cross = false)
+    public Route[] GetMoveableTiles(Vector3Int pos, int maxDist, bool cross = false)
     {
-        pos.z = 0;
         List<Route> tiles = new List<Route>();
 
         Route root = new Route(pos, null, 0);
@@ -140,7 +168,7 @@ public class TileMapManager : MonoBehaviour
 
         foreach (var move in moveArr)
         {
-            if (CheckBlocked((Vector3Int)(root.pos + move)))
+            if (CheckBlocked(root.pos + move))
                 tiles.Add(new Route(root.pos + move, root, root.dist + 1));
         }
 
@@ -167,155 +195,23 @@ public class TileMapManager : MonoBehaviour
                 }
             }
         }
-        return tiles;
+        return tiles.ToArray();
     }
-    /*
-    public List<Route> GetAttackableTiles(Vector3Int pos, Range range)
+
+    public Route[] GetAttackableTiles(Vector3Int pos, Range range, out TileObject[] units)
     {
-        pos.z = 0;
         List<Route> tiles = new List<Route>();
+        List<Route> targetTiles = new List<Route>();
+        List<TileObject> targetUnits = new List<TileObject>();
+
         Route root = new Route(pos, null, 0);
-
-        List<Vector3Int> dirList = new List<Vector3Int>();
-
-        if (range.rangeType != Range.RangeType.AXIS_DIAGONAL)
+        if (GetUnitTile(pos).GetComponent<TileObject>())
         {
-            dirList.AddRange(new List<Vector3Int> { 
-                new Vector3Int(1, 0, 0), new Vector3Int(-1, 0, 0), 
-                new Vector3Int(0, 1, 0), new Vector3Int(0, -1, 0) 
-            });
-        }
-        
-        if ((range.rangeType == Range.RangeType.DISTANCE && range.maxRange >= 2)
-            || (range.rangeType != Range.RangeType.DISTANCE 
-            && range.rangeType != Range.RangeType.AXIS_CROSS))
-        {
-            dirList.AddRange(new List<Vector3Int> { 
-                new Vector3Int(1, 1, 0), new Vector3Int(1, -1, 0), 
-                new Vector3Int(-1, 1, 0), new Vector3Int(-1, -1, 0) 
-            });
+            targetTiles.Insert(0, root);
+            targetUnits.Add(GetUnitTile(pos).GetComponent<TileObject>());
         }
 
         List<Vector3Int> nonSight = new List<Vector3Int>();
-
-        foreach (var dir in dirList)
-        {
-            Vector3Int next = pos + dir;
-            if (dir.x == 0 || dir.y == 0)
-            {
-                if ((range.ignoreBlocked && IsPosAvail(next)) || CheckBlocked(next))
-                    tiles.Add(new Route(next, root, 1));
-                else if (IsPosAvail(next + dir))
-                {
-                    if (dir.x == 0)
-                    {
-                        nonSight.Add(next + dir + new Vector3Int(1, 0, 0));
-                        nonSight.Add(next + dir + new Vector3Int(-1, 0, 0));
-                    }
-                    else
-                    {
-                        nonSight.Add(next + dir + new Vector3Int(0, 1, 0));
-                        nonSight.Add(next + dir + new Vector3Int(0, -1, 0));
-                    }
-                }
-            }
-            if ((range.ignoreBlocked && IsPosAvail(next)) || CheckBlocked(next))
-            {
-                if(range.rangeType == Range.RangeType.DISTANCE)
-                    tiles.Add(new Route(next, root, 
-                        Mathf.Abs(dir.x) + Mathf.Abs(dir.y)));
-                else 
-                    tiles.Add(new Route(next, root, 1));
-            }
-        }
-
-
-        int counter = 0;
-        while (tiles.Count > counter)
-        {
-            Route cur = tiles[counter];
-            Vector3Int dir = cur.pos - cur.preRoute.pos;
-            Vector3Int next = cur.pos + dir;
-            counter++;
-
-            if (cur.dist == range.maxRange)
-                continue;
-
-            if (dir.x == 0 || dir.y == 0)
-            {
-                if((range.ignoreBlocked && IsPosAvail(next)) || CheckBlocked(next))
-                    tiles.Add(new Route(next, cur, cur.dist + 1));
-                else if (IsPosAvail(next + dir))
-                {
-                    if (dir.x == 0)
-                    {
-                        nonSight.Add(next + dir + new Vector3Int(1, 0, 0));
-                        nonSight.Add(next + dir + new Vector3Int(-1, 0, 0));
-                    }
-                    else
-                    {
-                        nonSight.Add(next + dir + new Vector3Int(0, 1, 0));
-                        nonSight.Add(next + dir + new Vector3Int(0, -1, 0));
-                    }
-                }
-            }
-            else
-            {
-                if (range.rangeType == Range.RangeType.DISTANCE || range.rangeType == Range.RangeType.SQUARE)
-                {
-                    Vector3Int temp = cur.pos + new Vector3Int(1, 0, 0) * dir;
-                    if (((range.ignoreBlocked && IsPosAvail(temp)) || CheckBlocked(temp))
-                        && !nonSight.Exists(x => { return x == temp; }))
-                        tiles.Add(new Route(temp, cur, cur.dist + 1));
-                    else if(IsPosAvail(next + dir))
-                    {
-                        nonSight.Add(next + dir + new Vector3Int(0, 1, 0));
-                        nonSight.Add(next + dir + new Vector3Int(0, -1, 0));
-                    }
-
-
-                    temp = cur.pos + new Vector3Int(0, 1, 0) * dir;
-                    if (((range.ignoreBlocked && IsPosAvail(temp)) || CheckBlocked(temp))
-                        && !nonSight.Exists(x => { return x == temp; }))
-                        tiles.Add(new Route(temp, cur, cur.dist + 1));
-                    else if(IsPosAvail(next + dir))
-                    {
-                        nonSight.Add(next + dir + new Vector3Int(1, 0, 0));
-                        nonSight.Add(next + dir + new Vector3Int(-1, 0, 0));
-                    }
-                }
-                if ((range.ignoreBlocked && IsPosAvail(next)) || CheckBlocked(next))
-                {
-                    if (range.rangeType != Range.RangeType.DISTANCE)
-                        tiles.Add(new Route(next, cur, cur.dist + 1));
-                    else if (cur.dist + 2 <= range.maxRange)
-                        tiles.Add(new Route(next, cur, cur.dist + 2));
-                }
-            }
-
-            if (cur.dist < range.minRange)
-            {
-                counter--;
-                tiles.RemoveAt(counter);
-            }
-        }
-
-        foreach (var v in nonSight)
-        {
-            Debug.Log(v);
-        }
-
-        return tiles;
-    }
-    */
-    public List<Route> GetAttackableTiles(Vector3Int pos, Range range)
-    {
-        pos.z = 0;
-        List<Route> tiles = new List<Route>();
-        Route root = new Route(pos, null, 0);
-
-        List<Vector3Int> nonSight = new List<Vector3Int>();
-        int tempMin = range.minRange > 0 ? range.minRange : 1;
 
         if (range.rangeType != Range.RangeType.AXIS_DIAGONAL)
         {
@@ -337,6 +233,13 @@ public class TileMapManager : MonoBehaviour
                     }
                     else if (IsPosAvail(next + dir))
                     {
+                        GameObject obj = GetUnitTile(next);
+                        if (obj && obj.GetComponent<TileObject>())
+                        {
+                            targetTiles.Add(new Route(next, preRoute, i));
+                            targetUnits.Add(obj.GetComponent<TileObject>());
+                        }
+
                         if (dir.x == 0)
                         {
                             nonSight.Add(next + dir + new Vector3Int(1, 0, 0));
@@ -352,10 +255,10 @@ public class TileMapManager : MonoBehaviour
                 }
             }
         }
+
         int counter = tiles.Count;
 
-        if ((range.rangeType == Range.RangeType.DISTANCE && range.maxRange >= 2)
-            || (range.rangeType != Range.RangeType.DISTANCE && range.rangeType != Range.RangeType.AXIS_CROSS))
+        if (range.rangeType != Range.RangeType.AXIS_CROSS)
         {
             List<Vector3Int> dirList = new List<Vector3Int> {
                 new Vector3Int(1, 1, 0), new Vector3Int(1, -1, 0),
@@ -381,7 +284,15 @@ public class TileMapManager : MonoBehaviour
                         tiles.Add(preRoute);
                     }
                     else
+                    {
+                        GameObject obj = GetUnitTile(next);
+                        if (obj && obj.GetComponent<TileObject>())
+                        {
+                            targetTiles.Add(new Route(next, preRoute, i));
+                            targetUnits.Add(obj.GetComponent<TileObject>());
+                        }
                         break;
+                    }
                 }
             }
         }
@@ -404,21 +315,31 @@ public class TileMapManager : MonoBehaviour
                     {
                         tiles.Insert(counter, new Route(next, cur, cur.dist + 1));
                     }
-                    else if (IsPosAvail(next + dir))
+                    else 
                     {
-                        if (dir.x == 0)
+                        GameObject obj = GetUnitTile(next);
+                        if (obj && obj.GetComponent<TileObject>())
                         {
-                            if (next.x - pos.x > 0)
-                                nonSight.Add(next + dir + new Vector3Int(1, 0, 0));
-                            else
-                                nonSight.Add(next + dir + new Vector3Int(-1, 0, 0));
+                            targetTiles.Add(new Route(next, cur, cur.dist + 1));
+                            targetUnits.Add(obj.GetComponent<TileObject>());
                         }
-                        else
+                        if (IsPosAvail(next + dir))
                         {
-                            if (next.y - pos.y > 0)
-                                nonSight.Add(next + dir + new Vector3Int(0, 1, 0));
+
+                            if (dir.x == 0)
+                            {
+                                if (next.x - pos.x > 0)
+                                    nonSight.Add(next + dir + new Vector3Int(1, 0, 0));
+                                else
+                                    nonSight.Add(next + dir + new Vector3Int(-1, 0, 0));
+                            }
                             else
-                                nonSight.Add(next + dir + new Vector3Int(0, -1, 0));
+                            {
+                                if (next.y - pos.y > 0)
+                                    nonSight.Add(next + dir + new Vector3Int(0, 1, 0));
+                                else
+                                    nonSight.Add(next + dir + new Vector3Int(0, -1, 0));
+                            }
                         }
                     }
                 }
@@ -432,6 +353,12 @@ public class TileMapManager : MonoBehaviour
                     }
                     else if (IsPosAvail(temp))
                     {
+                        GameObject obj = GetUnitTile(temp);
+                        if (obj && obj.GetComponent<TileObject>())
+                        {
+                            targetTiles.Add(new Route(temp, cur, cur.dist + 1));
+                            targetUnits.Add(obj.GetComponent<TileObject>());
+                        }
                         if (temp.y - pos.y > 0)
                             nonSight.Add(temp + new Vector3Int(1, 0, 0) * dir + new Vector3Int(0, 1, 0));
                         else
@@ -447,6 +374,12 @@ public class TileMapManager : MonoBehaviour
                     }
                     else if (IsPosAvail(temp))
                     {
+                        GameObject obj = GetUnitTile(temp);
+                        if (obj && obj.GetComponent<TileObject>())
+                        {
+                            targetTiles.Add(new Route(temp, cur, cur.dist + 1));
+                            targetUnits.Add(obj.GetComponent<TileObject>());
+                        }
                         if (temp.x - pos.x > 0)
                             nonSight.Add(temp + new Vector3Int(0, 1, 0) * dir + new Vector3Int(1, 0, 0));
                         else
@@ -465,24 +398,18 @@ public class TileMapManager : MonoBehaviour
             }
         }
 
-        if (range.minRange == 0)
-            tiles.Insert(0, root);
-
-        return tiles;
-    }
-}
-
-public class Route
-{
-    public Vector3Int pos; 
-    public Route preRoute;
-    public int dist;
-
-
-    public Route(Vector3Int pos, Route preRoute, int dist)
-    {
-        this.pos = pos;
-        this.preRoute = preRoute;
-        this.dist = dist;
+        for (int i = 0; i < targetTiles.Count; i++)
+        {
+            if (targetTiles[i].dist < range.minRange)
+            {
+                targetTiles.RemoveAt(i);
+                targetUnits.RemoveAt(i);
+                i--;
+            }
+        }
+        
+        units = targetUnits.ToArray();
+        targetTiles.AddRange(tiles);
+        return targetTiles.ToArray();
     }
 }

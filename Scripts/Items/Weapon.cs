@@ -4,19 +4,27 @@ using UnityEngine;
 using UnityEngine.Events;
 
 [CreateAssetMenu(fileName = "Weapon", menuName = "Items/Weapon", order = 20)]
-public class Weapon : Item
+public class Weapon : BaseItem
 {
-    [SerializeField]
-    SkillBase attackAct = null;
+    [SerializeField] SkillBase attackSkill;
+    [SerializeField] SkillBase defenseSkill;
+    [SerializeField] Status status;
 
-    private void OnEnable()
+    public Status GetStatus() { return status; }
+
+    Unit owner;
+    public void Init(Unit owner)
     {
-        itemType = ItemType.WEAPONE;
+        this.owner = owner;
     }
 
-    public SkillBase GetAttackAct()
+    public SkillBase Attack()
     {
-        attackAct.SetCaster(owner);
-        return attackAct;
+        return attackSkill;
+    }
+
+    public SkillBase Defense()
+    {
+        return defenseSkill;
     }
 }

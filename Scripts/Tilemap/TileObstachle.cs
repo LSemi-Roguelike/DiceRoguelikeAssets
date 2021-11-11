@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
-public interface IDamageable
+
+public class TileObstachle : TileObject
 {
-    public void GetDamage(int damage);
+    
 }

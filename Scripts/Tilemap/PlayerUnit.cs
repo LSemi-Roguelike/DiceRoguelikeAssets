@@ -5,15 +5,18 @@ using UnityEngine;
 public class PlayerUnit : TileUnit
 {
     //for test
-    [SerializeField] protected int speed = 2;
     [SerializeField] protected GameObject attEffect;
-
-    [SerializeField] Range myAttackRange;
+    [SerializeField] protected GameObject onMouse;
+    [SerializeField] protected bool canSelect;
 
     private void Start()
     {
-        attRange = myAttackRange;
         Init();
+    }
+
+    public override void GetTurn()
+    {
+
     }
 
     protected override void PreUpdate()
@@ -32,12 +35,16 @@ public class PlayerUnit : TileUnit
                 onMouse.SetActive(false);
             }
         }
-
         TestUpdate();
     }
 
 
     protected override void IdleUpdate()
+    {
+
+    }
+
+    protected override void TurnUpdate()
     {
 
     }
@@ -61,7 +68,22 @@ public class PlayerUnit : TileUnit
 
         if (Input.GetMouseButtonDown(0))
         {
+            Vector3Int clickCellPos = TileMapManager.manager.WorldToCell(onMouse.transform.position);
+            StartCoroutine(AttackTo(clickCellPos));
+        }
+    }
 
+    public void SelectDiceParts(DiceParts diceParts)
+    {
+        if (diceParts is MoveDiceParts)
+        {
+            var moveParts = diceParts as MoveDiceParts;
+            SetMove(moveParts.getMovePoint);
+        }
+        else if (diceParts is SkillDiceParts)
+        {
+            var skillParts = diceParts as SkillDiceParts;
+            SetSkill(skillParts.getDiceSkill);
         }
     }
 
@@ -75,12 +97,11 @@ public class PlayerUnit : TileUnit
         }
         if (Input.GetKeyDown(KeyCode.S))
         {
-            movePoint = speed;
-            SetMove();
+            SetMove(unit.GetMovePoint());
         }
         if (Input.GetKeyDown(KeyCode.D))
         {
-            SetAttack();
+            SetSkill(unit.GetAttackSkill());
         }
     }
 }

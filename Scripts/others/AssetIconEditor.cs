@@ -3,13 +3,13 @@
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(Item))]
+[CustomEditor(typeof(UpgradeItem))]
 public class ItemEditor : Editor
 {
     public override Texture2D RenderStaticPreview(string assetPath,
         UnityEngine.Object[] subAssets, int width, int height)
     {
-        var obj = target as Item;
+        var obj = target as UpgradeItem;
         var icon = obj.GetSprite();
         var preview = AssetPreview.GetAssetPreview(icon);
 

@@ -6,16 +6,16 @@ using UnityEngine;
 public class ItemObject : MonoBehaviour
 {
     [SerializeField]
-    Item item;
+    BaseItem obj;
 
     private void Awake()
     {
         gameObject.tag = "Item";
-        GetComponent<SpriteRenderer>().sprite = item.GetSprite();
+        GetComponent<SpriteRenderer>().sprite = obj.GetSprite();
     }
 
-    public Item GetItem()
+    public BaseItem GetItem()
     {
-        return item;
+        return obj;
     }
 }
