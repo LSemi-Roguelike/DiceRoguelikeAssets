@@ -7,10 +7,9 @@ public class Player : Unit
     protected List<BaseItem> items;
     protected Dictionary<DiceType, List<Dice>> dices;
 
-
-
     protected virtual void Awake()
     {
+        Init();
         items = new List<BaseItem>();
 
         dices = new Dictionary<DiceType, List<Dice>>();
@@ -19,6 +18,11 @@ public class Player : Unit
             dices[diceType] = new List<Dice>();
         }
         SetTotalStatus();
+    }
+
+    protected override void Init()
+    {
+        base.Init();
     }
 
     public BaseItem AddItem(UpgradeItem item, Parts.PartsType partsType)
@@ -41,9 +45,7 @@ public class Player : Unit
 
     protected override void SetTotalStatus()
     {
-        totalStatus = new Status();
-
-        totalStatus += charStatus;
+        base.SetTotalStatus();
     }
 
     public void ChangeParts(Parts newParts)

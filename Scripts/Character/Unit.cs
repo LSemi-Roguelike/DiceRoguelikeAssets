@@ -26,6 +26,11 @@ public class Unit : MonoBehaviour
 
     private void Awake()
     {
+        Init();
+    }
+
+    protected virtual void Init()
+    {
         SetTotalStatus();
     }
 
