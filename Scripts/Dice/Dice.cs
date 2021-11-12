@@ -8,9 +8,9 @@ public class Dice : MonoBehaviour
     [SerializeField]
     DiceType diceType;
     [SerializeField]
-    TileUnit owner;
+    PlayerUnit owner;
 
-    public DiceParts[] sides { get; private set; }
+    public DiceParts[] parts { get; private set; }
 
     public DiceType GetDiceType(){return diceType;}
 
@@ -45,7 +45,7 @@ public class Dice : MonoBehaviour
     {
         for (int i = 0; i < 6; i++)
         {
-            transform.GetChild(i).GetComponent<SpriteRenderer>().sprite = sides[i].GetSprite();
+            transform.GetChild(i).GetComponent<SpriteRenderer>().sprite = parts[i].GetSprite();
         }
     }
 
@@ -63,6 +63,6 @@ public class Dice : MonoBehaviour
 
     void SelectSide(int num)
     {
-
+        owner.SelectDiceParts(parts[num]);
     }
 }

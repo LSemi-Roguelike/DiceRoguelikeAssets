@@ -5,7 +5,6 @@ using UnityEngine;
 public class PlayerUnit : TileUnit
 {
     //for test
-    [SerializeField] protected GameObject attEffect;
     [SerializeField] protected GameObject onMouse;
     [SerializeField] protected bool canSelect;
 
