@@ -1,224 +1,217 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Tilemaps;
 
 
-public abstract class TileUnit : TileObject
+public abstract class TileUnit : TileObject, IAttackable
 {
-    public enum UnitState { IDLE, TURN, MOVE, ATTACK }
+    public enum UnitBehavior { IDLE, MOVE, ATTACK, END }
 
     [SerializeField] protected GameObject rangePrefab;
-
-    [SerializeField] protected float movementSpeed = 1.0f;
-    [SerializeField] protected bool crossMove;
-    
-    protected bool myTurn;
-    protected bool onCasting;
-    protected Unit unit;
-
-    protected int turnCost;
-    protected int movePoint;
-    protected SkillBase skill;
-    protected UnitState unitState;
-
-    protected List<Vector3> moveRoute;
-    protected TileObject[] targetObjs;
-
+    [HideInInspector]
+    public Unit unit;
+    protected int turnPoint;
+    [HideInInspector] public int turnCount;
 
     protected GameObject rangeContainer;
-    protected GameObject[] inRange;
+    protected GameObject[] rangeObjects;
     protected Route[] rangeRoutes;
 
-    protected override void Init()
+    public override void Init()
     {
         base.Init();
-        unit = mainObj.GetComponent<Unit>();
-        if (unit == null)
+        if (!(baseUnit is Unit))
+        {
             Debug.LogError(name + " has not unit object");
+            Destroy(gameObject);
+        }
+        unit = baseUnit as Unit;
+        unit.Init();
 
         rangeContainer = new GameObject();
         rangeContainer.transform.SetParent(transform);
 
-        moveRoute = new List<Vector3>();
-        inRange = new GameObject[] { };
+        rangeObjects = new GameObject[] { };
         rangeRoutes = new Route[] { };
+        ResetTurnCount();
+    }
 
-        unitState = UnitState.IDLE;
-    }
-    private void Start()
+    void ResetTurnCount()
     {
-        Init();
+        turnCount = Utils.GetTurnCount(unit.GetStatus().speed);
     }
-    void Update()
+
+    protected abstract IEnumerator TurnStart();
+    protected abstract IEnumerator TurnEnd();
+    protected abstract IEnumerator BehaviorSelect(System.Action<UnitBehavior> action);
+    protected abstract IEnumerator SelectMovement(System.Action<Movement> action);
+    protected abstract IEnumerator SelectSkill(System.Action<Skill> action);
+    protected abstract IEnumerator MovePointSelect(System.Action<int> action);
+    protected abstract IEnumerator AttackTargetSelect(System.Action<int> action);
+
+    public IEnumerator GetTurn()
     {
-        PreUpdate();
-        if (onCasting)
-            return;
-        switch (unitState)
+        yield return StartCoroutine(TurnStart());
+        turnPoint = unit.GetTurnPoint();
+
+        while (turnPoint > 0)
         {
-            case UnitState.IDLE:
-                IdleUpdate();
-                break;
-            case UnitState.TURN:
-                TurnUpdate();
-                break;
-            case UnitState.MOVE:
-                if (moveRoute.Count > 0)
-                {
-                    transform.position = Vector3.MoveTowards(transform.position, moveRoute[0], movementSpeed * Time.deltaTime);
-                    if (transform.position == moveRoute[0])
-                    {
-                        Vector3Int temp = TileMapManager.manager.WorldToCell(moveRoute[0]);
-                        TileMapManager.manager.MoveUnit(cellPos, temp);
-                        cellPos = temp;
-                        moveRoute.RemoveAt(0);
-                        movePoint--;
-                        if (moveRoute.Count == 0)
-                        {
-                            StartCoroutine(SkillCasting(cellPos, unit.MoveAct()));
-                        }
-                    }
+            UnitBehavior unitState = UnitBehavior.IDLE;
+            while (unitState == UnitBehavior.IDLE)
+            {
+                yield return StartCoroutine(BehaviorSelect((t) => { unitState = t; }));
+                yield return null;
+            }
+
+            switch (unitState)
+            {
+                case UnitBehavior.MOVE:
+                    yield return StartCoroutine(MoveUpdate());
                     break;
-                }
-                MoveUpdate();
-                break;
-            case UnitState.ATTACK:
-                AttackUpdate();
-                break;
+                case UnitBehavior.ATTACK:
+                    yield return StartCoroutine(AttackUpdate());
+                    break;
+                case UnitBehavior.END:
+                    turnPoint = -1;
+                    break;
+                default:
+                    break;
+            }
+            yield return null;
         }
+        yield return StartCoroutine(TurnEnd());
+        ResetTurnCount();
     }
 
-    public abstract void GetTurn();
-    protected abstract void PreUpdate();
-    protected abstract void IdleUpdate();
-    protected abstract void TurnUpdate();
-    protected abstract void MoveUpdate();
-    protected abstract void AttackUpdate();
-
-    protected IEnumerator SkillCasting(Vector3Int rootPos, List<SkillBase> skills)
+    protected IEnumerator SkillCasting(TileObject target, List<SkillBase> skills)
     {
         if (skills == null)
             yield break;
-        onCasting = true;
+
         foreach (var skill in skills)
         {
-            TileObject[] targets;
-            var routes = TileMapManager.manager.GetAttackableTiles(rootPos, skill.GetRange(), out targets);
-            SetRange(routes);
-            yield return skill.Cast(unit, TileObjArrToMainObjArr(targets));
+            yield return skill.Cast(unit, target);
         }
-        SetIdle();
-        onCasting = false;
     }
-    protected bool MoveTo(Vector3Int pos)
+    
+    protected IEnumerator MoveUpdate()
     {
-        for (int i = 0; i < rangeRoutes.Length; i++)
+        //set move range
+        RemoveRnage();
+        Movement movement = null;
+        yield return StartCoroutine(SelectMovement((a) => { movement = a; }));
+        if (movement == null || movement.cost > turnPoint)
+            yield break;
+
+        SetRange(TileMapManager.manager.GetMoveableTiles(cellPos, movement.movePoint, movement.diagonalMove));
+
+        //select move point
+        turnPoint -= movement.cost;
+        int select = -1;
+        while (select < 0 || rangeRoutes.Length <= select)
         {
-            if (rangeRoutes[i].pos == pos)
+            yield return StartCoroutine(MovePointSelect((t) => { select = t; }));
+            if (select == -2)
+                yield break;
+
+            yield return null;
+        }
+
+        //set move route
+        List<Vector3> moveRoute = new List<Vector3>();
+        Route destination = rangeRoutes[select];
+        while (destination.preRoute != null)
+        {
+            moveRoute.Insert(0, TileMapManager.manager.CellToWorld(destination.pos));
+            destination = destination.preRoute;
+        }
+        RemoveRnage();
+
+        //on moving
+        while (moveRoute.Count > 0)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, moveRoute[0], Utils.tileMoveSpeed * Time.deltaTime);
+            if (transform.position == moveRoute[0])
             {
-                Route destination = rangeRoutes[i];
-                while (destination.preRoute != null)
-                {
-                    moveRoute.Insert(0, TileMapManager.manager.CellToWorld(destination.pos));
-                    destination = destination.preRoute;
-                }
-                RemoveRnage();
-                return true;
+                Vector3Int temp = TileMapManager.manager.WorldToCell(moveRoute[0]);
+                TileMapManager.manager.MoveUnit(cellPos, temp);
+                cellPos = temp;
+                moveRoute.RemoveAt(0);
             }
+            yield return null;
         }
-        return false;
+        //yield return SkillCasting(this, unit.MoveAct());
     }
 
-    protected IEnumerator AttackTo(Vector3Int pos)
+    protected IEnumerator AttackUpdate()
     {
-        for (int i = 0; i < rangeRoutes.Length; i++)
+        //set attack skill
+        RemoveRnage();
+        Skill skill = null;
+        yield return StartCoroutine(SelectSkill((t) => { skill = t; }));
+
+        if (skill == null)
+            yield break;
+
+        TileObject[] targets;
+        SetRange(TileMapManager.manager.GetAttackableTiles(cellPos, skill.range, out targets));
+        if(targets.Length == 0)
+            yield break;
+        turnPoint -= skill.cost;
+
+        var temp = new Route[targets.Length];
+        for (int i = 0; i < targets.Length; i++)
         {
-            if (rangeRoutes[i].pos == pos)
-            {
-                TileObject[] targets;
-                var routes = TileMapManager.manager.GetAttackableTiles(pos, skill.GetEffect(), out targets);
-                SetRange(routes);
-                yield return skill.Cast(unit, TileObjArrToMainObjArr(targets));
-                RemoveRnage();
-
-                yield return SkillCasting(pos, unit.AttackAct());
-                break;
-            }
+            temp[i] = rangeRoutes[i];
         }
-    }
+        rangeRoutes = temp;
 
-    protected void SetIdle()
-    {
-        if (unitState == UnitState.IDLE)
-            return;
-
-        unitState = UnitState.IDLE;
-        RemoveRnage();
-        skill = null;
-        movePoint = 0;
-    }
-
-    protected void SetTurn(int cost)
-    {
-        if (unitState == UnitState.TURN)
-            return;
-
-        turnCost = cost;
-        unitState = UnitState.TURN;
-        RemoveRnage();
-        skill = null;
-        movePoint = 0;
-    }
-
-    protected void SetMove(int movePoint)
-    {
-        if (unitState == UnitState.MOVE)
-            return;
-
-        unitState = UnitState.MOVE;
-
-        RemoveRnage();
-        SetRange(TileMapManager.manager.GetMoveableTiles(cellPos, movePoint, crossMove));
-    }
-
-    protected void SetSkill(SkillBase skill)
-    {
-        if (unitState == UnitState.ATTACK)
-            return;
-
-        unitState = UnitState.ATTACK;
-        this.skill = skill;
-
-        RemoveRnage();
-        SetRange(TileMapManager.manager.GetAttackableTiles(cellPos, skill.GetRange(), out targetObjs));
-        foreach (var target in targetObjs)
+        //select target
+        int select = -1;
+        while (select < 0 || targets.Length <= select)
         {
-            Debug.Log(target.name + target.transform.position);
+            yield return StartCoroutine(AttackTargetSelect((t) => { select = t; }));
+            if (select == -2)
+                yield break;
+
+            yield return null;
         }
+        RemoveRnage();
+
+        //cast skills
+        yield return StartCoroutine(skill.skill.Cast(unit, targets[select]));
+        //yield return StartCoroutine(SkillCasting(targets[select], unit.AttackAct()));
     }
 
     protected void SetRange(Route[] routes)
     {
-        if (inRange.Length != 0)
+        if (rangeObjects.Length != 0)
             RemoveRnage();
 
         rangeRoutes = routes;
-        inRange = new GameObject[routes.Length];
+        rangeObjects = new GameObject[routes.Length];
         for(int i = 0; i < routes.Length; i++)
         {
             GameObject temp = Instantiate(rangePrefab, TileMapManager.manager.CellToWorld(routes[i].pos), rangePrefab.transform.rotation);
             temp.transform.SetParent(rangeContainer.transform);
-            inRange[i] = temp;
+            rangeObjects[i] = temp;
         }
     }
 
     protected void RemoveRnage()
     {
-        foreach(var r in inRange)
+        foreach(var r in rangeObjects)
         {
             Destroy(r);
         }
-        inRange = new GameObject[] { };
+        rangeObjects = new GameObject[] { };
     }
+
+    public override void DestroyObject()
+    {
+        TurnManager.manager.RemoveUnit(this);
+        base.DestroyObject();
+    }
+
+    public abstract void GetAttack(Damage damage);
 }

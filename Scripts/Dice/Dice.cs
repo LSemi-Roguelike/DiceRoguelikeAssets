@@ -7,8 +7,6 @@ public class Dice : MonoBehaviour
     int maxCost;
     [SerializeField]
     DiceType diceType;
-    [SerializeField]
-    PlayerUnit owner;
 
     public DiceParts[] parts { get; private set; }
 
@@ -63,6 +61,6 @@ public class Dice : MonoBehaviour
 
     void SelectSide(int num)
     {
-        owner.SelectDiceParts(parts[num]);
+        //owner.SelectDiceParts(parts[num]);
     }
 }

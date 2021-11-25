@@ -2,15 +2,11 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Unit : MonoBehaviour
+public class Unit : BaseUnit
 {
-    [SerializeField]
-    string id;
-    [SerializeField]
-    string charName;
 
     [SerializeField] protected Status charStatus;
-    [SerializeField] protected Status statusMagnify;
+    [SerializeField] protected Status statusMagnify = Status.one;
 
     protected Status buffStatus;
     protected Status totalStatus;
@@ -21,15 +17,7 @@ public class Unit : MonoBehaviour
     protected Parts armParts, legParts, bodyParts;
     protected List<SkillBase> Skills;
 
-    public string GetName() { return charName; }
-    public string GetID() { return id; }
-
-    private void Awake()
-    {
-        Init();
-    }
-
-    protected virtual void Init()
+    public virtual void Init()
     {
         SetTotalStatus();
     }
@@ -48,9 +36,9 @@ public class Unit : MonoBehaviour
         return bodyParts?.GetSkills();
     }
 
-    public int GetMovePoint()
+    public int GetTurnPoint()
     {
-        return (int)totalStatus.speed;
+        return 3;
     }
 
     public SkillBase GetAttackSkill()
@@ -68,7 +56,10 @@ public class Unit : MonoBehaviour
         totalStatus += legParts.GetStatus();
         totalStatus += bodyParts.GetStatus();
         totalStatus += weapon.GetStatus();
+    }
 
-        Debug.Log(totalStatus.ToString());
+    public Status GetStatus()
+    {
+        return totalStatus;
     }
 }

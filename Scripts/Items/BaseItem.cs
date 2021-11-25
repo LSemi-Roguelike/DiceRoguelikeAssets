@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class BaseItem : ScriptableObject
 {
-    protected Sprite sprite;
+    [SerializeField] protected string id;
+    [SerializeField] protected Sprite sprite;
 
+    public string GetID() { return id; }
     public Sprite GetSprite() { return sprite; }
 }

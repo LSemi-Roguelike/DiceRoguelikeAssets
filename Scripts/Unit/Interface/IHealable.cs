@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 
 
-public interface Buffable
+public interface IHealable
 {
-    public void GetBuff();
+    public void GetHeal(Heal heal);
 }

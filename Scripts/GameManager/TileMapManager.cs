@@ -10,22 +10,18 @@ public class TileMapManager : MonoBehaviour
     [SerializeField]
     Tilemap groudTileMap, unitTileMap, trapTileMap;
 
-    GameObject[][] groundTileArray;
-    GameObject[][] unitTileArray;
-    GameObject[][] trapTileArray;
+    GameObject[][] groundTileArray, unitTileArray, trapTileArray;
 
     int x_anchor, y_anchor, x_size, y_size;
 
     private void Awake()
     {
         manager = this;
-        SetTilemap(groudTileMap, unitTileMap);
+        SetTilemap();
     }
 
-    public void SetTilemap(Tilemap gTile, Tilemap uTile)
+    public void SetTilemap()
     {
-        groudTileMap = gTile;
-        unitTileMap = uTile;
         int tileCount = groudTileMap.transform.childCount;
         int xMax = 0, xMin = 0, yMax = 0, yMin = 0;
         for (int i = 0; i < tileCount; i++)
@@ -62,7 +58,6 @@ public class TileMapManager : MonoBehaviour
             Vector3Int pos = WorldToCell(child.position);
             groundTileArray[pos.x + x_anchor][pos.y + y_anchor] = child.gameObject;
         }
-
         for (int i = 0; i < unitTileMap.transform.childCount; i++)
         {
             Transform child = unitTileMap.transform.GetChild(i);
@@ -143,6 +138,12 @@ public class TileMapManager : MonoBehaviour
         if (!IsPosAvail(pos))
             return;
         unitTileArray[pos.x + x_anchor][pos.y + y_anchor] = null;
+    }
+    public void RemoveUnit(TileUnit unit)
+    {
+        Vector3Int pos = WorldToCell(unit.transform.position);
+        if(unitTileArray[pos.x + x_anchor][pos.y + y_anchor] == unit.gameObject)
+            unitTileArray[pos.x + x_anchor][pos.y + y_anchor] = null;
     }
 
     public bool CheckBlocked(Vector3Int pos)

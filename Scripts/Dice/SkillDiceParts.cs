@@ -4,6 +4,6 @@ using UnityEngine;
 public class SkillDiceParts : DiceParts
 {
     [SerializeField]
-    SkillBase diceSkill = null;
-    public SkillBase getDiceSkill { get { return diceSkill; } }
+    Skill diceSkill = null;
+    public Skill getDiceSkill { get { return diceSkill; } }
 }

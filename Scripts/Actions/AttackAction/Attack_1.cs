@@ -10,10 +10,11 @@ public class Attack_1 : SkillBase
         throw new System.NotImplementedException();
     }
 
-    public override IEnumerator Cast(Unit caster,  GameObject[] targets)
+    public override IEnumerator Cast(Unit caster,  TileObject[] targets)
     {
         foreach (var target in targets)
         {
+
             Debug.Log(target.name + ", " + TileMapManager.manager.WorldToCell(target.transform.position));
             Instantiate(effectPrefab, target.transform.position, target.transform.rotation);
         }

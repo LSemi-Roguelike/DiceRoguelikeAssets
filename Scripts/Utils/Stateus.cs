@@ -1,15 +1,15 @@
 [System.Serializable]
 public class Status
 {
-    public float hp;
-    public float attack;
-    public float defense;
-    public float hacking;
-    public float secure;
-    public float speed;
-    public float luck;
+    public int hp;
+    public int attack;
+    public int defense;
+    public int hacking;
+    public int secure;
+    public int speed;
+    public int luck;
 
-    public Status(float hp, float attack, float defense, float hacking, float secure, float speed, float luck)
+    public Status(int hp, int attack, int defense, int hacking, int secure, int speed, int luck)
     {
         this.hp = hp;
         this.attack = attack;
@@ -57,11 +57,11 @@ public class Status
     public override string ToString()
     {
         return "HP: " + hp + 
-            "\n att: " + attack + 
-            "\n def: " + defense + 
-            "\n hac: " + hacking + 
-            "\n sec: " + secure + 
-            "\n spd: " + speed + 
-            "\n lck: " + luck;
+            "\natt: " + attack + 
+            "\ndef: " + defense + 
+            "\nhac: " + hacking + 
+            "\nsec: " + secure + 
+            "\nspd: " + speed + 
+            "\nlck: " + luck;
     }
 }

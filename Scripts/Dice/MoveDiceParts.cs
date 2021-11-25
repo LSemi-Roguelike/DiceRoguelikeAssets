@@ -4,7 +4,7 @@ using UnityEngine;
 public class MoveDiceParts : DiceParts
 {
     [SerializeField]
-    int movePoint;
+    Movement movement;
 
-    public int getMovePoint { get { return movePoint; } }
+    public Movement getMovement { get { return movement; } }
 }

@@ -5,10 +5,9 @@ using UnityEngine.Events;
 
 public abstract class SkillBase : MonoBehaviour
 {
-    [SerializeField] protected Range range;
-    [SerializeField] protected Range effect;
-
-    public Range GetRange() { return range; }
-    public Range GetEffect() { return effect; }
-    public abstract IEnumerator Cast(Unit caster, GameObject[] targets);
+    public abstract IEnumerator Cast(Unit caster, TileObject[] targets);
+    public IEnumerator Cast(Unit caster, TileObject target)
+    {
+        yield return Cast(caster, new TileObject[] { target });
+    }
 }

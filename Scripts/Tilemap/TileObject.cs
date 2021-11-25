@@ -7,32 +7,31 @@ using UnityEngine.Tilemaps;
 public abstract class TileObject : MonoBehaviour
 {
 
-    [SerializeField] protected GameObject mainObj;
+    [SerializeField] protected BaseUnit baseUnit;
     protected Vector3Int cellPos;
 
-    public GameObject GetMainObj() { return mainObj; }
+    public BaseUnit GetMainUnit() { return baseUnit; }
 
-    protected virtual void Init()
+    public virtual void Init()
     {
         cellPos = TileMapManager.manager.WorldToCell(transform.position);
-    }
-    private void Start()
-    {
-        Init();
+        baseUnit.transform.SetParent(transform);
+        transform.position = TileMapManager.manager.CellToWorld(cellPos);
     }
 
-    public void GetForce(Vector3Int dir)
+    public static BaseUnit[] TileObjArrToMainObjArr(TileObject[] tileObjects)
     {
-
-    }
-
-    public static GameObject[] TileObjArrToMainObjArr(TileObject[] tileObjects)
-    {
-        GameObject[] units = new GameObject[tileObjects.Length];
+        BaseUnit[] units = new BaseUnit[tileObjects.Length];
         for (int i = 0; i < tileObjects.Length; i++)
         {
-            units[i] = tileObjects[i].GetMainObj();
+            units[i] = tileObjects[i].GetMainUnit();
         }
         return units;
+    }
+
+    public virtual void DestroyObject()
+    {
+        TileMapManager.manager.RemoveUnit(cellPos);
+        Destroy(gameObject);
     }
 }

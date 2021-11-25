@@ -1,10 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Tilemaps;
 
 
-public class TileObstachle : TileObject
+[System.Serializable]
+public abstract class Buff
 {
-    
+
 }

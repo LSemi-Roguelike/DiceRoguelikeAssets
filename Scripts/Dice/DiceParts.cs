@@ -2,8 +2,10 @@ using UnityEngine;
 
 public abstract class DiceParts : BaseItem
 {
-    [SerializeField]
-    int cost;
+    protected Dice dice;
 
-    public int getCost { get { return cost; } }
+    public void SetDice(Dice dice)
+    {
+        this.dice = dice;
+    }
 }

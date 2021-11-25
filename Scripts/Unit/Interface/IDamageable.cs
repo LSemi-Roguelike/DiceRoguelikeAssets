@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 
 
-public interface Damgeable
+public interface IDamgeable
 {
-    public void GetDamage();
+    public void GetDamage(Damage damage);
 }

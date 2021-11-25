@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : Unit
+public class Player : Unit , IDamgeable
 {
     protected List<BaseItem> items;
     protected Dictionary<DiceType, List<Dice>> dices;
@@ -20,7 +20,7 @@ public class Player : Unit
         SetTotalStatus();
     }
 
-    protected override void Init()
+    public override void Init()
     {
         base.Init();
     }
@@ -65,5 +65,11 @@ public class Player : Unit
                 bodyParts = newParts;
                 break;
         }
+    }
+
+    public void GetDamage(Damage damage)
+    {
+        //asdf
+        throw new NotImplementedException();
     }
 }
