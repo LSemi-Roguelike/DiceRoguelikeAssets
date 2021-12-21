@@ -3,22 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[System.Serializable]
-public class Range
+namespace LSemiRoguelike
 {
-    public enum RangeType { AXIS_CROSS, AXIS_DIAGONAL, AXIS_ALL, DISTANCE, SQUARE}
-
-    public RangeType rangeType;
-    public int minRange;
-    public int maxRange;
-
-    public bool ignoreBlocked;
-
-    public Range(RangeType rangeType, int minRange, int maxRange, bool ignoreBloked = false)
+    [System.Serializable]
+    public class Range
     {
-        this.rangeType = rangeType;
-        this.ignoreBlocked = ignoreBloked;
-        this.minRange = minRange;
-        this.maxRange = maxRange;
+        public enum RangeType { AXIS_CROSS, AXIS_DIAGONAL, AXIS_ALL, DISTANCE, SQUARE }
+
+        public RangeType rangeType;
+        public int minRange;
+        public int maxRange;
+
+        public bool ignoreBlocked;
+
+        public Range(RangeType rangeType, int minRange, int maxRange, bool ignoreBloked = false)
+        {
+            this.rangeType = rangeType;
+            this.ignoreBlocked = ignoreBloked;
+            this.minRange = minRange;
+            this.maxRange = maxRange;
+        }
     }
 }

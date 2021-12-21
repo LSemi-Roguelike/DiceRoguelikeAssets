@@ -2,17 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Route
+namespace LSemiRoguelike
 {
-    public Vector3Int pos;
-    public Route preRoute;
-    public int dist;
-
-
-    public Route(Vector3Int pos, Route preRoute, int dist)
+    public class Route
     {
-        this.pos = pos;
-        this.preRoute = preRoute;
-        this.dist = dist;
+        public Vector3Int pos;
+        public Route preRoute;
+        public int dist;
+
+
+        public Route(Vector3Int pos, Route preRoute, int dist)
+        {
+            this.pos = pos;
+            this.preRoute = preRoute;
+            this.dist = dist;
+        }
     }
 }

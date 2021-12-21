@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[System.Serializable]
-public class Heal
+namespace LSemiRoguelike
 {
-    public int heal;
+    [System.Serializable]
+    public class Heal
+    {
+        public int heal;
+    }
 }

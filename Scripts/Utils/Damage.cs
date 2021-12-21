@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[System.Serializable]
-public class Damage
+namespace LSemiRoguelike
 {
-    public int damage;
+    [System.Serializable]
+    public class Damage
+    {
+        public int damage;
+    }
 }

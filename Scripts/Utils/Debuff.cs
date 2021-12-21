@@ -3,8 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[System.Serializable]
-public abstract class Debuff
+namespace LSemiRoguelike
 {
-
+    [System.Serializable]
+    public abstract class Debuff
+    {
+        //remaining turn
+        public int remaining;
+    }
 }

@@ -2,6 +2,7 @@
 #if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine;
+using LSemiRoguelike;
 
 [CustomEditor(typeof(UpgradeItem))]
 public class ItemEditor : Editor
@@ -10,7 +11,7 @@ public class ItemEditor : Editor
         UnityEngine.Object[] subAssets, int width, int height)
     {
         var obj = target as UpgradeItem;
-        var icon = obj.GetSprite();
+        var icon = obj.sprite;
         var preview = AssetPreview.GetAssetPreview(icon);
 
         if (preview == null)
@@ -33,7 +34,7 @@ public class PartsEditor : Editor
         UnityEngine.Object[] subAssets, int width, int height)
     {
         var obj = target as Parts;
-        var icon = obj.GetSprite();
+        var icon = obj.sprite;
         var preview = AssetPreview.GetAssetPreview(icon);
 
         if (preview == null)
@@ -56,7 +57,7 @@ public class WeaponEditor : Editor
         UnityEngine.Object[] subAssets, int width, int height)
     {
         var obj = target as Weapon;
-        var icon = obj.GetSprite();
+        var icon = obj.sprite;
         var preview = AssetPreview.GetAssetPreview(icon);
 
         if (preview == null)
@@ -79,7 +80,7 @@ public class DicePartsEditor : Editor
         UnityEngine.Object[] subAssets, int width, int height)
     {
         var obj = target as DiceParts;
-        var icon = obj.GetSprite();
+        var icon = obj.sprite;
         var preview = AssetPreview.GetAssetPreview(icon);
 
         if (preview == null)
