@@ -6,7 +6,7 @@ using UnityEngine.Tilemaps;
 
 namespace LSemiRoguelike
 {
-    public class TileObstacle : TileContainer, IDamgeable
+    public class TileObstacle : TileContainer, IDamageable
     {
         public IEnumerator GetDamage(Damage damage)
         {

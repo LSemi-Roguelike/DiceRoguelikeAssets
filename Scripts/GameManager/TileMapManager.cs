@@ -213,8 +213,9 @@ namespace LSemiRoguelike
             return true;
         }
 
-        public void RemoveUnit(Vector3Int pos)
+        public void RemoveUnit(TileContainer unit)
         {
+            var pos = unit.cellPos;
             if (!IsPosAvail(pos))
                 return;
             unitTileArray[pos.x + x_anchor][pos.y + y_anchor] = null;

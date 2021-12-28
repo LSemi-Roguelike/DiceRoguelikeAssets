@@ -10,6 +10,7 @@ namespace LSemiRoguelike
         public static TurnManager manager;
         List<TileUnit> units;
         Transform cameraViewPoint;
+        Coroutine nowCo;
 
         private void Awake()
         {
@@ -47,27 +48,33 @@ namespace LSemiRoguelike
         {
             while (units != null)
             {
-                int count = units[0].turnCount;
-                float cameraSpeed = (cameraViewPoint.transform.position - units[0].transform.position).magnitude * (1 / Utils.cameraMoveTime);
-                while (cameraViewPoint.transform.position != units[0].transform.position)
+                var unit = units[0];
+                int count = unit.turnCount;
+                float cameraSpeed = (cameraViewPoint.transform.position - unit.transform.position).magnitude * (1 / Utils.cameraMoveTime);
+                Transform pointedTransform = unit.transform;
+
+                while (cameraViewPoint.transform.position != unit.transform.position)
                 {
-                    cameraViewPoint.position = Vector3.MoveTowards(cameraViewPoint.position, units[0].transform.position, cameraSpeed * Time.deltaTime);
+                    cameraViewPoint.position = Vector3.MoveTowards(cameraViewPoint.position, pointedTransform.position, cameraSpeed * Time.deltaTime);
                     yield return null;
                 }
 
-                cameraViewPoint.SetParent(units[0].transform);
-                yield return StartCoroutine(units[0].GetTurn());
-                cameraViewPoint.SetParent(null);
-                int insertPoint = 1;
+                cameraViewPoint.SetParent(pointedTransform);
+                nowCo = StartCoroutine(unit.GetTurn());
+                yield return nowCo;
 
-                for (int i = 1; i < units.Count; i++)
+                cameraViewPoint.SetParent(null);
+
+                units.Remove(unit);
+                int insertPoint = 0;
+                for (int i = 0; i < units.Count; i++)
                 {
                     units[i].turnCount -= count;
-                    if (units[i].turnCount <= units[0].turnCount)
+                    if (units[i].turnCount <= unit.turnCount)
                         insertPoint++;
                 }
-                units.Insert(insertPoint, units[0]);
-                units.RemoveAt(0);
+                units.Insert(insertPoint, unit);
+                Debug.Log(units.Count);
 
                 yield return null;
             }
@@ -75,6 +82,11 @@ namespace LSemiRoguelike
 
         public void RemoveUnit(TileUnit unit)
         {
+            if (unit == units[0])
+            {
+                cameraViewPoint.SetParent(null);
+                StopCoroutine(nowCo);
+            }
             units.Remove(unit);
         }
     }

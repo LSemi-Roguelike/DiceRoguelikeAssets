@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace LSemiRoguelike
 {
-    public class TileDiceUnit : TileUnit
+    public class TileDiceUnit : TileUnit, IDamageable
     {
         [SerializeField] DiceManager _diceManager;
         DiceManager diceManager;
@@ -21,11 +21,17 @@ namespace LSemiRoguelike
 
         protected override IEnumerator TurnStart()
         {
-            yield return null;
+            Debug.Log(diceManager.name + " turn start");
+            var skills = diceUnit.GetPassiveSkills();
+            foreach (var skill in skills)
+            {
+                yield return StartCoroutine(SkillCasting(skill));
+            }
         }
 
         protected override IEnumerator TurnEnd()
         {
+            Debug.Log(diceManager.name + " turn end");
             yield return null;
         }
 
@@ -117,7 +123,7 @@ namespace LSemiRoguelike
             var skills = diceUnit.GetSubSkills(Parts.PartsType.ARM);
             foreach (var skill in skills)
             {
-                yield return StartCoroutine(SkillCasting(skill));
+                yield return StartCoroutine(SkillCasting(skill, target));
             }
         }
 

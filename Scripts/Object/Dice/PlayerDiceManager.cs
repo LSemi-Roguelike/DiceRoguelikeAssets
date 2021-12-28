@@ -27,7 +27,7 @@ namespace LSemiRoguelike
             if (Input.GetKeyDown(KeyCode.Escape))
                 action(null);
             else
-                action(skill);
+                action(Instantiate(skill));
         }
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace LSemiRoguelike
 {
-    public abstract class TileUnit : TileContainer, IDamgeable
+    public abstract class TileUnit : TileContainer, IDamageable
     {
         public enum UnitBehavior { IDLE, MOVE, ATTACK, END }
 
@@ -58,6 +58,11 @@ namespace LSemiRoguelike
                 while (unitState == UnitBehavior.IDLE)
                 {
                     yield return StartCoroutine(BehaviorSelect((t) => { unitState = t; }));
+                    if (unitState == UnitBehavior.END)
+                    {
+                        yield return StartCoroutine(TurnEnd());
+                        yield break;
+                    }
                     yield return null;
                 }
 
@@ -180,9 +185,12 @@ namespace LSemiRoguelike
             yield return StartCoroutine(AttackEnd(targets[select]));
         }
         
-        public IEnumerator GetDamage(Damage damage)
+        public virtual IEnumerator GetDamage(Damage damage)
         {
-            unit.GetDamage(damage);
+            if(unit.GetDamage(damage))
+            {
+                Destroy(gameObject);
+            }
             yield return StartCoroutine(GetDamageEnd(damage));
         }
 
@@ -210,10 +218,10 @@ namespace LSemiRoguelike
             rangeObjects = new GameObject[] { };
         }
 
-        public override void DestroyObject()
+        protected override void OnDestroy()
         {
             TurnManager.manager.RemoveUnit(this);
-            base.DestroyObject();
+            base.OnDestroy();
         }
     }
 }

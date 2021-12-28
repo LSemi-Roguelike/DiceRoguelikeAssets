@@ -18,15 +18,9 @@ namespace LSemiRoguelike
             transform.position = TileMapManager.manager.CellToWorld(cellPos);
         }
 
-        public virtual void DestroyObject()
-        {
-            TileMapManager.manager.RemoveUnit(cellPos);
-            Destroy(gameObject);
-        }
-
         protected virtual void OnDestroy()
         {
-            TileMapManager.manager.RemoveUnit(cellPos);
+            TileMapManager.manager.RemoveUnit(this);
         }
     }
 }

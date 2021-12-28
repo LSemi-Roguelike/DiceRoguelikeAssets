@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace LSemiRoguelike
 {
-    public interface IDamgeable
+    public interface IDamageable
     {
         public IEnumerator GetDamage(Damage damage);
     }
