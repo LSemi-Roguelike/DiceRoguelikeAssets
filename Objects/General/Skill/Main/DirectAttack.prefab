@@ -1,0 +1,85 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7383512993328325397
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7383512993328325399}
+  - component: {fileID: 7383512993328325396}
+  m_Layer: 0
+  m_Name: DirectAttack
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7383512993328325399
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7383512993328325397}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.4390616, y: 3.6004696, z: 0.46004677}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7383512993328325396
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7383512993328325397}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a205b4eee9eca8b41a60f7ccdf133a25, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _grade: 1
+  targetLayer: 0
+  effect:
+    effectType: 0
+    status:
+      hp: 0
+      armor: 0
+      power: 0
+    condition:
+      burn:
+        duration: 0
+        grade: 0
+      frozen:
+        duration: 0
+        grade: 0
+      discharge:
+        duration: 0
+        grade: 0
+      shock:
+        duration: 0
+        grade: 0
+      poison:
+        duration: 0
+        grade: 0
+      recovery:
+        duration: 0
+        grade: 0
+      wet:
+        duration: 0
+        grade: 0
+    ability:
+      attack: 0
+      defense: 0
+      secure: 0
+      speed: 0
+      hacking: 0
+      luck: 0
+    knockback: {x: 0, y: 0, z: 0}
+  vfxPrefab: {fileID: 0}
+  sfxClip: {fileID: 0}
