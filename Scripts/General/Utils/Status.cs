@@ -4,29 +4,27 @@ namespace LSemiRoguelike
     public struct Status
     {
         public float hp;
-        public float armor;
-        public int power;
+        public float shield;
 
-        public Status(float hp, float armor, int power)
+        public Status(float hp, float shield)
         {
             this.hp = hp;
-            this.armor = armor;
-            this.power = power;
+            this.shield = shield;
         }
 
         public override string ToString()
         {
-            return $"HP: {hp}, Power: {power}";
+            return $"HP: {hp}, Shield: {shield}";
         }
 
         public static Status operator +(Status a, Status b)
         {
-            return new Status(a.hp + b.hp, a.armor + b.armor, a.power + b.power);
+            return new Status(a.hp + b.hp, a.shield + b.shield);
         }
 
         public static Status operator -(Status a, Status b)
         {
-            return new Status(a.hp - b.hp, a.armor - b.armor, a.power - b.power);
+            return new Status(a.hp - b.hp, a.shield - b.shield);
         }
     }
 }

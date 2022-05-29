@@ -4,7 +4,7 @@ namespace LSemiRoguelike
     public struct Ability
     {
         //attack
-        public float attackAdd;
+        public float attackIncrese;
         public float attackMulti;
 
         //damaged
@@ -14,10 +14,10 @@ namespace LSemiRoguelike
         Condition attackCon;
         Condition resistCon;
 
-        public Ability(float attackAdd, float attackMulti, float damageReduce, float damageMulti) : this(attackAdd, attackMulti, damageReduce, damageMulti, new Condition(), new Condition()) { }
-        public Ability(float attackAdd, float attackMulti, float damageReduce, float damageMulti, Condition attackCon, Condition resistCon)
+        public Ability(float attackIncrese, float attackMulti, float damageReduce, float damageMulti) : this(attackIncrese, attackMulti, damageReduce, damageMulti, new Condition(), new Condition()) { }
+        public Ability(float attackIncrese, float attackMulti, float damageReduce, float damageMulti, Condition attackCon, Condition resistCon)
         {
-            this.attackAdd = attackAdd; 
+            this.attackIncrese = attackIncrese; 
             this.attackMulti = attackMulti;
             this.damageReduce = damageReduce;
             this.damageMulti = damageMulti;
@@ -30,7 +30,7 @@ namespace LSemiRoguelike
         public override string ToString()
         {
             return
-                "Attack Add: " + attackAdd +"\tAttack Multi: " + attackMulti +
+                "Attack Increase: " + attackIncrese + "\tAttack Multi: " + attackMulti +
                 "\nDamage Reduce: " + damageReduce +"\tDamage Multi " + damageMulti
                 ;
         }

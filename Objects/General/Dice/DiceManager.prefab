@@ -410,8 +410,8 @@ MonoBehaviour:
     back:
       range:
         rangeType: 2
-        minRange: 3
-        maxRange: 0
+        minRange: 0
+        maxRange: 3
         ignoreBlocked: 0
       skill: {fileID: 0}
       sprite: {fileID: 0}

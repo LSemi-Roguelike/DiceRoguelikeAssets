@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7383512993328325399}
   - component: {fileID: 7383512993328325396}
   m_Layer: 0
-  m_Name: DirectAttack
+  m_Name: DirectAttack 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -48,38 +48,32 @@ MonoBehaviour:
   effect:
     effectType: 0
     status:
-      hp: 0
-      armor: 0
+      hp: -1
+      shield: 0
       power: 0
     condition:
       burn:
-        duration: 0
         grade: 0
-      frozen:
         duration: 0
-        grade: 0
-      discharge:
-        duration: 0
-        grade: 0
-      shock:
-        duration: 0
-        grade: 0
       poison:
-        duration: 0
         grade: 0
+        duration: 0
+      frozen:
+        grade: 0
+        duration: 0
+      shock:
+        grade: 0
+        duration: 0
       recovery:
-        duration: 0
         grade: 0
-      wet:
         duration: 0
-        grade: 0
+      wet: 0
+      oiled: 0
     ability:
-      attack: 0
-      defense: 0
-      secure: 0
-      speed: 0
-      hacking: 0
-      luck: 0
+      attackAdd: 0
+      attackMulti: 0
+      damageReduce: 0
+      damageMulti: 0
     knockback: {x: 0, y: 0, z: 0}
-  vfxPrefab: {fileID: 0}
+  vfxPrefab: {fileID: 100004, guid: 38621d8fa046a0445ab464c15d0da070, type: 3}
   sfxClip: {fileID: 0}

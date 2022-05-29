@@ -37,6 +37,8 @@ public class DiceSelectUI : MonoBehaviour
     {
         this.accept = accept;
         this.maxCost = maxCost;
+        this.cost = 0;
+        this.weaponUse = false;
 
         float xInterval = width / (dices.Count + 3);
         diceUIs = new DiceInfoUI[dices.Count];

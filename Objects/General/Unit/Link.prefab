@@ -142,17 +142,33 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _id: 0
   _name: TestPlayer
-  maxStatus:
+  _maxStatus:
     hp: 10
-    armor: 10
-    power: 3
-  ability:
-    attack: 5
-    defense: 0
-    secure: 0
-    speed: 0
-    hacking: 0
-    luck: 0
+    shield: 0
+  _ability:
+    attackAdd: 0
+    attackMulti: 0
+    damageReduce: 0
+    damageMulti: 0
+  _resist:
+    burn:
+      grade: 0
+      duration: 0
+    poison:
+      grade: 0
+      duration: 0
+    frozen:
+      grade: 0
+      duration: 0
+    shock:
+      grade: 0
+      duration: 0
+    recovery:
+      grade: 0
+      duration: 0
+    wet: 0
+    oiled: 0
+  maxPower: 3
   weaponPrefab: {fileID: -3935503393781002923, guid: edfbc9270c3f21248b21df73f2ee9fce, type: 3}
   armPartsPrefab: {fileID: -7351224460041336507, guid: 8db74a571663b0149ad6533a079cc117, type: 3}
   legPartsPrefab: {fileID: -7351224460041336507, guid: 1fb825b7c6a64344383db7da7936ad94, type: 3}

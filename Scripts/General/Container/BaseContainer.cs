@@ -22,17 +22,21 @@ namespace LSemiRoguelike
         public virtual void GetEffect(Effect effect)
         {
             _unit.GetEffect(effect);
+            _statusUI.SetUI(_unit.status);
         }
 
         public void Init(BaseUnit baseUnit)
         {
             _unit = baseUnit;
+            _unit.Init();
             Init();
         }
 
         protected virtual void Init()
         {
             _unit.container = this;
+            _statusUI.InitUI(_unit.maxStatus);
+            _statusUI.SetUI(_unit.status);
         }
 
         protected virtual void SetStatusUI()

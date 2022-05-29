@@ -92,6 +92,7 @@ namespace LSemiRoguelike.Strategy
         {
             yield return StartCoroutine(skill.Cast(unit, target));
             nowAct = ActType.SelectAction;
+            _statusUI.SetUI(_unit.status);
         }
 
         protected IEnumerator MoveTo(List<Vector3> moveRoute)
@@ -112,6 +113,7 @@ namespace LSemiRoguelike.Strategy
                 yield return null;
             }
             nowAct = ActType.SelectAction;
+            _statusUI.SetUI(_unit.status);
         }
         protected void ResetTurnCount()
         {

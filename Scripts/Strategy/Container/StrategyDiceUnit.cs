@@ -80,10 +80,5 @@ namespace LSemiRoguelike.Strategy
         {
 
         }
-
-        public override void GetEffect(Effect effect)
-        {
-
-        }
     }
 }

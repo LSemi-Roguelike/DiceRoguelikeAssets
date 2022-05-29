@@ -22,7 +22,7 @@ namespace LSemiRoguelike
 
         public void GetAction()
         {
-            diceManager.GetActions(status.power);
+            diceManager.GetActions(power);
         }
     }
 }

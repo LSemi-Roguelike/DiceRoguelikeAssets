@@ -7,13 +7,17 @@ namespace LSemiRoguelike
 {
     public class ItemUnit : BaseUnit
     {
+        [Header("Items")]
+        [SerializeField] protected int maxPower;
         [SerializeField] protected Weapon weaponPrefab;
         [SerializeField] protected Parts armPartsPrefab, legPartsPrefab, bodyPartsPrefab;
         [SerializeField] protected List<Accessory> accessoryPrefabs;
+
+        protected int power;
+
         protected Weapon weapon;
         protected Parts armParts, legParts, bodyParts;
         protected List<Accessory> accessorys;
-
         protected Status buffStatus;
 
         public override void Init()
@@ -23,6 +27,7 @@ namespace LSemiRoguelike
             legParts = Instantiate(legPartsPrefab, transform).Init(this);
             bodyParts = Instantiate(bodyPartsPrefab, transform).Init(this);
 
+            power = maxPower;
             accessorys = new List<Accessory>();
             foreach (Accessory accessory in accessoryPrefabs)
             {
@@ -40,15 +45,6 @@ namespace LSemiRoguelike
         public IEnumerator Move(float power)
         {
             yield return StartCoroutine(legParts.PowerGenerate(power));
-        }
-
-        public IEnumerator GetEffectCo(Effect effect)
-        {
-            GetEffect(effect);
-            if(IsDead) yield break;
-
-            if(effect.status.hp < 0)
-                yield return StartCoroutine(bodyParts.PowerGenerate(effect.status.hp));
         }
     }
 }

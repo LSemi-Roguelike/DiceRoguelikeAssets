@@ -5,12 +5,13 @@ namespace LSemiRoguelike
 {
     public class BaseUnit : MonoBehaviour, IHaveInfo
     {
-        //info
+        [Header("Info")]
         [SerializeField] protected uint _id;
         [SerializeField] protected string _name;
         public uint ID { get { return _id; } }
         public string Name { get { return _name; } }
 
+        [Header("Status")]
         [SerializeField] protected Status _maxStatus;
         [SerializeField] protected Ability _ability;
         [SerializeField] protected Condition _resist;
@@ -18,6 +19,7 @@ namespace LSemiRoguelike
         protected Status _status;
 
         public Status status => _status;
+        public Status maxStatus => _maxStatus;
 
         protected BaseContainer _container;
         public BaseContainer container
@@ -36,28 +38,28 @@ namespace LSemiRoguelike
 
         public virtual Effect SetEffect(Effect effect)
         {
-            effect.status.hp *= _ability.attackMulti;
+            effect.status.hp += effect.status.hp*_ability.attackMulti;
             if(effect.status.hp > 0)
-                effect.status.hp += _ability.attackAdd;
+                effect.status.hp += _ability.attackIncrese;
             else if(effect.status.hp < 0)
-                effect.status.hp -= _ability.attackAdd;
+                effect.status.hp -= _ability.attackIncrese;
 
             return effect;
         }
 
         public virtual void GetEffect(Effect effect)
         {
-            _status.armor += effect.status.armor;
+            _status.shield += effect.status.shield;
             if (effect.status.hp < 0)
             {
-                _status.armor += effect.status.hp;
-                if (_status.armor < 0)
+                _status.shield += effect.status.hp;
+                if (_status.shield < 0)
                 {
-                    _status.hp += _status.armor;
-                    _status.armor = 0;
+                    _status.hp += _status.shield;
+                    _status.shield = 0;
                 }
             }
-            else if (effect.status.hp < 0)
+            else if (effect.status.hp > 0)
             {
                 _status.hp += effect.status.hp;
                 if (_status.hp > _maxStatus.hp)

@@ -13,7 +13,6 @@ namespace LSemiRoguelike.Strategy
         protected override void Init()
         {
             base.Init();
-            _unit.Init();
             cellPos = TileMapManager.manager.WorldToCell(Pos);
             transform.position = TileMapManager.manager.CellToWorld(cellPos);
         }

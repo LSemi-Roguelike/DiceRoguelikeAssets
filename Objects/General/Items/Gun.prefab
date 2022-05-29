@@ -100,7 +100,7 @@ MonoBehaviour:
   _sprite: {fileID: 0}
   status:
     hp: 0
-    armor: 0
+    shield: 0
     power: 0
   _unitAction:
     range:
@@ -108,5 +108,5 @@ MonoBehaviour:
       minRange: 0
       maxRange: 3
       ignoreBlocked: 0
-    skill: {fileID: 5815759009385987979, guid: d9a1c8b804fe55c4d9bf79e51fae868d, type: 3}
+    skill: {fileID: 7383512993328325396, guid: be7f6f1e1fdb6e64e8a5d7bd14b598f0, type: 3}
     sprite: {fileID: 0}

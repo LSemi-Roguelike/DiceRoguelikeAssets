@@ -11,6 +11,7 @@ public class DirectAttack : MainSkill
     {
         var finalEffect = effect;
         finalEffect = caster.SetEffect(finalEffect);
+        Instantiate(vfxPrefab, target.Pos, vfxPrefab.transform.rotation);
         target.GetEffect(finalEffect);
         yield break;
     }
