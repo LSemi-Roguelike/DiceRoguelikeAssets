@@ -9,18 +9,16 @@ namespace LSemiRoguelike.Strategy
     {
         protected enum ActType { WaitAction, SelectAction, SelectTarget, TurnEnd }
         protected ActType nowAct;
-        protected List<StrategeAction> _actions;
-        protected int _selectedAction;
 
         [HideInInspector] public int turnCount;
-        public new ItemUnit unit { get { return base.unit as ItemUnit; } }
+        public new ActingUnit unit { get { return base.unit as ActingUnit; } }
         
         protected int turnPoint;
         protected bool _onTurn;
         public bool OnTurn => _onTurn;
         public bool isDead => unit.IsDead;
 
-        protected override void Init()
+        public override void Init()
         {
             base.Init();
             ResetTurnCount();
@@ -45,25 +43,11 @@ namespace LSemiRoguelike.Strategy
             TurnManager.manager.TurnRotate();
         }
 
-        protected bool Acting(StrategeAction action, Vector3Int targetPos)
+        protected bool Acting(StrategyAction action, Vector3Int targetPos)
         {
-            var rangeRoutes = _actions[_selectedAction].rangeObject.routes;
-            if (_actions[_selectedAction].skill)
+            if (action.skill is Move)
             {
-                var targets = _actions[_selectedAction].rangeObject.targets;
-                foreach (var target in targets)
-                {
-                    if (target.cellPos == targetPos)
-                    {
-                        nowAct = ActType.WaitAction;
-                        StartCoroutine(SkillCast(action.skill, target));
-                        return true;
-                    }
-                }
-                return false;
-            }
-            else
-            {
+                var rangeRoutes = action.routes;
                 Route targetRoute = null;
                 for (int i = 0; i < rangeRoutes.Length; i++)
                 {
@@ -86,11 +70,25 @@ namespace LSemiRoguelike.Strategy
                 StartCoroutine(MoveTo(moveRoute));
                 return true;
             }
+            else
+            {
+                var targets = action.targets;
+                foreach (var target in targets)
+                {
+                    if (target.cellPos == targetPos)
+                    {
+                        nowAct = ActType.WaitAction;
+                        StartCoroutine(SkillCast(action.skill, target));
+                        return true;
+                    }
+                }
+                return false;
+            }
         }
 
         protected IEnumerator SkillCast(MainSkill skill, StrategyContainer target)
         {
-            yield return StartCoroutine(skill.Cast(unit, target));
+            yield return StartCoroutine(skill.Cast(target));
             nowAct = ActType.SelectAction;
             _statusUI.SetUI(_unit.status);
         }

@@ -6,6 +6,25 @@ namespace LSemiRoguelike
 {
     public abstract class SubSkill : BaseSkill
     {
-        public abstract IEnumerator Cast(BaseContainer owner, float power);
+        [SerializeField] private float _cost;
+        private float _nowPower;
+
+        public override void Init(ActingUnit caster)
+        {
+            _nowPower = 0;
+            base.Init(caster);
+        }
+
+        public void SupplyPower(float power)
+        {
+            _nowPower += power;
+            if (_nowPower > _cost)
+            {
+                StartCoroutine(Cast());
+                _nowPower -= _cost;
+            }
+        }
+
+        protected abstract IEnumerator Cast();
     }
 }

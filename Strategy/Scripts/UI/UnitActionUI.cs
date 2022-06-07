@@ -9,7 +9,7 @@ public class UnitActionUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     private Image image;
     private Button button;
     private TextMeshProUGUI text;
-    private StrategeAction info;
+    private StrategyAction info;
 
     private void Awake()
     {
@@ -17,7 +17,7 @@ public class UnitActionUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         image = GetComponent<Image>();
         text = GetComponentInChildren<TextMeshProUGUI>();
     }
-    public void SetInfo(StrategeAction info, System.Action action)
+    public void SetInfo(StrategyAction info, System.Action action)
     {
         this.info = info;
         //image.sprite = info.sprite;
@@ -27,11 +27,11 @@ public class UnitActionUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        info.rangeObject.gameObject.SetActive(true);
+        RangeViewManager.Inst.ViewRange(info.routes);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        info.rangeObject?.gameObject.SetActive(false);
+        RangeViewManager.Inst.HideRange();
     }
 }

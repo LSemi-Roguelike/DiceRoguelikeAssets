@@ -7,6 +7,11 @@ namespace LSemiRoguelike
     public abstract class BaseSkill : MonoBehaviour
     {
         [SerializeField] protected int _grade = 0;
-        public int grade { get { return _grade; } }
+        [SerializeField] protected Sprite _sprite;
+        protected ActingUnit _caster;
+        public int grade => _grade;
+        public Sprite sprite => _sprite;
+        public ActingUnit caster => _caster;
+        public virtual void Init(ActingUnit caster) { _caster = caster; }
     }
 }

@@ -35,13 +35,13 @@ public class DiceObject : MonoBehaviour
         }
     }
 
-    public IEnumerator RollDice(Dice dice, System.Action<UnitAction> partsReturn)
+    public IEnumerator RollDice(Dice dice, System.Action<MainSkill> partsReturn)
     {
         xPos = transform.position.x;
         zPos = transform.position.z;
         for (int i = 0; i < sides.Length; i++)
         {
-            sideSprites[i].sprite = dice.unitActions[i].sprite;
+            sideSprites[i].sprite = dice.Skills[i].sprite;
         }
         coroutine = StartCoroutine(RollCo());
         yield return coroutine;
@@ -49,7 +49,7 @@ public class DiceObject : MonoBehaviour
         var rot = transform.InverseTransformDirection(Vector3.up);
         var num = (int)Mathf.Round(rot.x + rot.y * 2 + rot.z * 3);
         num = num > 0 ? num - 1 : 2 - num;
-        partsReturn(dice.unitActions[num%6]);
+        partsReturn(dice.Skills[num%6]);
     }
     
     IEnumerator RollCo()

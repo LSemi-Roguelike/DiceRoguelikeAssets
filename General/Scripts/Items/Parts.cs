@@ -4,40 +4,21 @@ using UnityEngine;
 
 namespace LSemiRoguelike
 {
-    public class Parts : BaseItem
+    public class Parts : BaseItem<SubSkill>
     {
         public enum PartsType { ARM, LEG, BODY }
 
         [SerializeField] protected PartsType type;
-        [SerializeField] protected Chip[] chipPrefabs;
-        [SerializeField] protected int socketCount;
-        [SerializeField] protected float powerGenMulti;
-        [SerializeField] Ability ability;
-        [SerializeField] Status itemStatus;
-        ItemUnit _unit;
-        protected Chip[] chips;
+        [SerializeField] protected float powerGenMulti = 1f;
 
         public PartsType GetPartsType() { return type; }
 
-        public Parts Init(ItemUnit unit)
+        public void PowerGenerate(float power)
         {
-            _unit = unit;
-            chips = new Chip[socketCount];
-            for (int i = 0; i < (chipPrefabs.Length > socketCount? socketCount : chipPrefabs.Length); i++)
+            foreach (var skill in skills)
             {
-                chips[i] = Instantiate(chipPrefabs[i], transform).Init(this);
-            }
-            return this;
-        }
-
-
-        public IEnumerator PowerGenerate(float power)
-        {
-            foreach (var chip in chips)
-            {
-                yield return StartCoroutine(chip.SupplyPower(power * powerGenMulti));
+                skill.SupplyPower(power * powerGenMulti);
             }
         }
-
     }
 }

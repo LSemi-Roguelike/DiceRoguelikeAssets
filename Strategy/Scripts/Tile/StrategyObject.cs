@@ -10,8 +10,8 @@ namespace LSemiRoguelike.Strategy
         [SerializeField] public string _name;
         [HideInInspector] public Vector3Int cellPos;
 
-        public string Name { get { return _name; } }
-        public uint ID { get { return _id; } }
+        public string Name => _name;
+        public uint ID => _id;
 
         public void Init(Vector3Int pos)
         {

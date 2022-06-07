@@ -5,11 +5,10 @@ using LSemiRoguelike;
 
 public class Passive_1 : PassiveSkill
 {
-
-    public override IEnumerator Cast(BaseContainer owner)
+    protected override IEnumerator Cast()
     {
-        Debug.Log(owner.Name + " Passive_1");
+        Debug.Log(_caster.Name + " Passive_1");
 
-        yield return new WaitForSeconds(1);
+        yield break;
     }
 }

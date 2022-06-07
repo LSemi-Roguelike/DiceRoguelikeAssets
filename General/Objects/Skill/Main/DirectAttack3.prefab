@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7383512993328325399}
   - component: {fileID: 7383512993328325396}
   m_Layer: 0
-  m_Name: DirectAttack
+  m_Name: DirectAttack3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -44,13 +44,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _grade: 1
+  _sprite: {fileID: 0}
+  range:
+    rangeType: 0
+    minRange: 0
+    maxRange: 3
+    ignoreBlocked: 0
   targetLayer: 0
   effect:
     effectType: 0
     status:
       hp: -3
       shield: 0
-      power: 0
+    power: 0
     condition:
       burn:
         grade: 0
@@ -70,7 +76,7 @@ MonoBehaviour:
       wet: 0
       oiled: 0
     ability:
-      attackAdd: 0
+      attackIncrese: 0
       attackMulti: 0
       damageReduce: 0
       damageMulti: 0

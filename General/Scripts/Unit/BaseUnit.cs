@@ -8,15 +8,17 @@ namespace LSemiRoguelike
         [Header("Info")]
         [SerializeField] protected uint _id;
         [SerializeField] protected string _name;
-        public uint ID { get { return _id; } }
-        public string Name { get { return _name; } }
+        public uint ID => _id;
+        public string Name => _name;
 
         [Header("Status")]
         [SerializeField] protected Status _maxStatus;
-        [SerializeField] protected Ability _ability;
+        [SerializeField] protected Ability _initAbility;
         [SerializeField] protected Condition _resist;
-        protected Condition _condition;
+
         protected Status _status;
+        protected Ability _ability;
+        protected Condition _condition;
 
         public Status status => _status;
         public Status maxStatus => _maxStatus;
@@ -31,10 +33,16 @@ namespace LSemiRoguelike
         public virtual void Init()
         {
             _status = _maxStatus;
+            SetAbility();
             _condition = new Condition();
         }
 
         public virtual bool IsDead => _status.hp <= 0;
+
+        public virtual void SetAbility()
+        {
+            _ability = _initAbility;
+        }
 
         public virtual Effect SetEffect(Effect effect)
         {
@@ -67,6 +75,7 @@ namespace LSemiRoguelike
             }
             GetConditionEffect(effect.condition);
         }
+
         protected virtual void GetConditionEffect(Condition effect)
         {
 

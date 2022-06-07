@@ -10,7 +10,7 @@ namespace LSemiRoguelike.Strategy
     {
         public Vector3Int cellPos { get; protected set; }
 
-        protected override void Init()
+        public override void Init()
         {
             base.Init();
             cellPos = TileMapManager.manager.WorldToCell(Pos);

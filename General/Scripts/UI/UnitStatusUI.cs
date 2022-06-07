@@ -12,13 +12,13 @@ public class UnitStatusUI : MonoBehaviour
     [SerializeField] private Text shieldTxt;
     float maxHp, hp, shield;
 
-    public void InitUI(Status maxStatus)
+    public virtual void InitUI(Status maxStatus)
     {
         maxHp = maxStatus.hp;
         hpSlider.maxValue = maxHp;
     }
 
-    public void SetUI(Status status)
+    public virtual void SetUI(Status status)
     {
         hp = status.hp;
         hpSlider.value = hp;

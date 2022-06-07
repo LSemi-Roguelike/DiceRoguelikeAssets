@@ -20,17 +20,11 @@ namespace LSemiRoguelike.Strategy
 
 
 		int x_anchor, y_anchor, x_size, y_size;
-		[SerializeField] bool saveMap;
-
-		public RangeObject rangeViewerPrefab;
 
 		private void Awake()
 		{
 			manager = this;
-			if (saveMap)
-				SetTilemap();
-			else
-				TilemapCreate(tileMapData);
+			SetTilemap();
 		}
 
 		private void Start()
@@ -38,56 +32,56 @@ namespace LSemiRoguelike.Strategy
 			TurnManager.manager.Init();
 		}
 
-		public void TilemapDataUpdate()
-		{
-			tileMapData.tiles = new List<ObjWithPos>();
-			tileMapData.units = new List<ObjWithPos>();
-			for (int i = 0; i < x_size * y_size; i++)
-			{
-				var tile = groundTileArray[i % x_size][i / x_size];
-				if (tile)
-				{
-					tileMapData.tiles.Add(new ObjWithPos(tile.ID, tile.cellPos));
-				}
+		//public void TilemapDataUpdate()
+		//{
+		//	tileMapData.tiles = new List<ObjWithPos>();
+		//	tileMapData.units = new List<ObjWithPos>();
+		//	for (int i = 0; i < x_size * y_size; i++)
+		//	{
+		//		var tile = groundTileArray[i % x_size][i / x_size];
+		//		if (tile)
+		//		{
+		//			tileMapData.tiles.Add(new ObjWithPos(tile.ID, tile.cellPos));
+		//		}
 
-				var unit = unitTileArray[i % x_size][i / x_size];
-				if (unit)
-				{
-					tileMapData.units.Add(new ObjWithPos(unit.unit.ID, unit.cellPos));
-				}
-			}
-		}
+		//		var unit = unitTileArray[i % x_size][i / x_size];
+		//		if (unit)
+		//		{
+		//			tileMapData.units.Add(new ObjWithPos(unit.unit.ID, unit.cellPos));
+		//		}
+		//	}
+		//}
 
-		public void TilemapCreate(TileMapData data)
-		{
-			List<ObjWithPos> tiles = data.tiles;
-			List<ObjWithPos> units = data.units;
+		//public void TilemapCreate(TileMapData data)
+		//{
+		//	List<ObjWithPos> tiles = data.tiles;
+		//	List<ObjWithPos> units = data.units;
 
-			if (tiles == null || units == null)
-			{
-				Debug.LogError("tiles or units are empty");
-				return;
-			}
+		//	if (tiles == null || units == null)
+		//	{
+		//		Debug.LogError("tiles or units are empty");
+		//		return;
+		//	}
 
-			foreach (var tile in tiles)
-			{
-				var obj = ResourceManager.GetTileByID(tile.objID);
-				if (obj == null)
-				{
-					continue;
-				}
-				var pos = CellToWorld(tile.pos) + obj.transform.position;
-				Instantiate(obj, pos, Quaternion.identity, groundTileMap.transform).Init(tile.pos);
-			}
+		//	foreach (var tile in tiles)
+		//	{
+		//		var obj = ResourceManager.GetTileByID(tile.objID);
+		//		if (obj == null)
+		//		{
+		//			continue;
+		//		}
+		//		var pos = CellToWorld(tile.pos) + obj.transform.position;
+		//		Instantiate(obj, pos, Quaternion.identity, groundTileMap.transform).Init(tile.pos);
+		//	}
 
-			foreach (var unit in units)
-			{
-				var pos = CellToWorld(unit.pos);
-				var container = Instantiate(ResourceManager.GetContainerByID(unit.objID / 100), pos, Quaternion.identity, unitTileMap.transform);
-				container.Init(Instantiate(GeneralResourceManager.GetUnitByID(unit.objID), container.transform));
-			}
-			SetTilemap();
-		}
+		//	foreach (var unit in units)
+		//	{
+		//		var pos = CellToWorld(unit.pos);
+		//		var container = Instantiate(ResourceManager.GetContainerByID(unit.objID / 100), pos, Quaternion.identity, unitTileMap.transform);
+		//		container.Init(Instantiate(GeneralResourceManager.GetUnitByID(unit.objID), container.transform));
+		//	}
+		//	SetTilemap();
+		//}
 
 		public void SetTilemap()
 		{
@@ -134,7 +128,7 @@ namespace LSemiRoguelike.Strategy
 				unitTileArray[pos.x + x_anchor][pos.y + y_anchor] = child.gameObject.GetComponent<StrategyContainer>();
 				//test
 				
-				child.GetComponent<StrategyContainer>().Init(child.GetComponentInChildren<BaseUnit>());
+				child.GetComponent<StrategyContainer>().Init();
 			}
 			//for (int i = 0; i < trapTileMap.transform.childCount; i++)
 			//{
@@ -142,7 +136,7 @@ namespace LSemiRoguelike.Strategy
 			//    Vector3Int pos = WorldToCell(child.position);
 			//    trapTileArray[pos.x + x_anchor][pos.y + y_anchor] = child.gameObject;
 			//}
-			TilemapDataUpdate();
+			//TilemapDataUpdate();
 		}
 
 		public Vector3Int WorldToCell(Vector3 pos)

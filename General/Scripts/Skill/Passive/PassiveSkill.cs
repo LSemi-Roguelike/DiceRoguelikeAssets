@@ -6,6 +6,19 @@ namespace LSemiRoguelike
 {
     public abstract class PassiveSkill : BaseSkill
     {
-        public abstract IEnumerator Cast(BaseContainer owner);
+        [SerializeField] private int _cost;
+        private int nowTurn;
+
+        public void GetTurn()
+        {
+            nowTurn++;
+            if (nowTurn == _cost)
+            {
+                StartCoroutine(Cast());
+                nowTurn = 0;
+            }
+        }
+
+        protected abstract IEnumerator Cast();
     }
 }

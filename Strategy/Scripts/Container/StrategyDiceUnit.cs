@@ -7,22 +7,24 @@ namespace LSemiRoguelike.Strategy
 {
     public class StrategyDiceUnit : StrategyUnit
     {
-        public DiceUnit diceUnit => unit as DiceUnit;
+        public PlayerUnit diceUnit => unit as PlayerUnit;
 
-        protected override void Init()
+        protected int _selectedAction;
+        protected List<StrategyAction> _actions;
+
+        public override void Init()
         {
             base.Init();
 
-            diceUnit.SetDiceManager(SetActions);
+            diceUnit.SetActionCallback(SetActions);
         }
 
-        private void SetActions(List<UnitAction> actions)
+        private void SetActions(List<MainSkill> actions)
         {
-            _actions = new List<StrategeAction>();
+            _actions = new List<StrategyAction>();
             for(int i = 0; i < actions.Count; i++)
             {
-                _actions.Add(new StrategeAction(actions[i]));
-                _actions[i].Instantiate(this);
+                _actions.Add(new StrategyAction(actions[i], cellPos));
             }
             nowAct = ActType.SelectAction;
         }
@@ -52,7 +54,7 @@ namespace LSemiRoguelike.Strategy
                         break;
                     }
                     foreach (var action in _actions)
-                        action.rangeObject.SetRange(action.range, this);
+                        action.SetRange(cellPos);
 
                     ActionSelectUI.inst.SetActionUI(_actions, SelectAction);
                     nowAct = ActType.WaitAction;
@@ -63,12 +65,15 @@ namespace LSemiRoguelike.Strategy
                         Vector3Int pos = InputManager.manager.GetMouseCellPos();
                         if (Acting(_actions[_selectedAction], pos))
                         {
-                            Destroy(_actions[_selectedAction].rangeObject.gameObject);
                             _actions.RemoveAt(_selectedAction);
+                            RangeViewManager.Inst.HideRange();
                         }
                     }
                     else if (Input.GetKeyDown(KeyCode.Escape))
+                    {
+                        RangeViewManager.Inst.HideRange();
                         nowAct = ActType.SelectAction;
+                    }
                     break;
                 case ActType.TurnEnd:
                     _onTurn = false;

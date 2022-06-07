@@ -8,16 +8,17 @@ namespace LSemiRoguelike
     {
         [SerializeField] protected uint _id;
         [SerializeField] protected string _name;
-        [SerializeField] protected BaseUnit _unit;
-        [SerializeField] protected UnitStatusUI _statusUI;
+        
+        [SerializeField] protected BaseUnit _unit;          //άβ?
+        [SerializeField] protected UnitStatusUI _statusUI;  //UI
 
-        public BaseUnit unit { get { return _unit; } }
+        public BaseUnit unit => _unit;
 
-        public uint ID { get { return _id; } }
+        public uint ID => _id;
 
-        public string Name { get { return _name; } }
+        public string Name => _name;
 
-        public virtual Vector3 Pos => transform.position;
+        public Vector3 Pos => transform.position;
 
         public virtual void GetEffect(Effect effect)
         {
@@ -28,12 +29,12 @@ namespace LSemiRoguelike
         public void Init(BaseUnit baseUnit)
         {
             _unit = baseUnit;
-            _unit.Init();
             Init();
         }
 
-        protected virtual void Init()
+        public virtual void Init()
         {
+            _unit.Init();
             _unit.container = this;
             _statusUI.InitUI(_unit.maxStatus);
             _statusUI.SetUI(_unit.status);

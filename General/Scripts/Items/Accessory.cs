@@ -4,16 +4,8 @@ using UnityEngine;
 
 namespace LSemiRoguelike
 {
-    public class Accessory : BaseItem
+    public class Accessory : BaseItem<PassiveSkill>
     {
-        [SerializeField] protected PassiveSkill skillPrefab;
-        protected PassiveSkill _skill;
-        public PassiveSkill Skill { get { return _skill; } }
 
-        public Accessory Init()
-        {
-            _skill = Instantiate(skillPrefab, transform);
-            return this;
-        }
     }
 }

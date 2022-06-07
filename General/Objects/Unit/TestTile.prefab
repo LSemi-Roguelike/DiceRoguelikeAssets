@@ -110,14 +110,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _id: 900
   _name: TestTile
-  maxStatus:
-    hp: 900
-    armor: 0
-    power: 0
-  ability:
-    attack: 0
-    defense: 900
-    secure: 0
-    speed: 0
-    hacking: 0
-    luck: 0
+  _maxStatus:
+    hp: 10
+    shield: 0
+  _ability:
+    attackIncrese: 0
+    attackMulti: 0
+    damageReduce: 0
+    damageMulti: 0
+  _resist:
+    burn:
+      grade: 0
+      duration: 0
+    poison:
+      grade: 0
+      duration: 0
+    frozen:
+      grade: 0
+      duration: 0
+    shock:
+      grade: 0
+      duration: 0
+    recovery:
+      grade: 0
+      duration: 0
+    wet: 0
+    oiled: 0

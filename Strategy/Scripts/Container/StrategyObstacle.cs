@@ -8,7 +8,7 @@ namespace LSemiRoguelike.Strategy
 {
     public class StrategyObstacle : StrategyContainer
     {
-        protected override void Init()
+        public override void Init()
         {
             base.Init();
             _statusUI.gameObject.SetActive(false);

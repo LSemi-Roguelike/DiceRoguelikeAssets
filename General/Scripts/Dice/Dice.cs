@@ -3,17 +3,35 @@ using UnityEngine;
 namespace LSemiRoguelike
 {
     [System.Serializable]
-    public struct Dice
+    public class Dice
     {
-        [SerializeField] public int _maxCost;
-        [SerializeField] private UnitAction up;
-        [SerializeField] private UnitAction down;
-        [SerializeField] private UnitAction left;
-        [SerializeField] private UnitAction right;
-        [SerializeField] private UnitAction forward;
-        [SerializeField] private UnitAction back;
+        [SerializeField] private int _maxCost;
+        [SerializeField] private MainSkill up, down, left, right, forward, back;
+        private MainSkill[] _skills;
 
         public int MaxCost => _maxCost;
-        public UnitAction[] unitActions => new UnitAction[] { right, up, forward, left, down, back };
+        public MainSkill[] Skills => _skills;
+
+        public void Init(PlayerUnit caster)
+        {
+            var obj = new GameObject("Dice").transform;
+            obj.parent = caster.transform;
+            _skills = new MainSkill[6] {
+                GameObject.Instantiate(right, obj),
+                GameObject.Instantiate(up, obj),
+                GameObject.Instantiate(forward, obj),
+                GameObject.Instantiate(left, obj),
+                GameObject.Instantiate(down, obj),
+                GameObject.Instantiate(back, obj)
+            };
+
+            for (int i = 0; i < 6; i++)
+                _skills[i].Init(caster);
+        }
+
+        public override string ToString()
+        {
+            return $"{Skills}";
+        }
     }
 }

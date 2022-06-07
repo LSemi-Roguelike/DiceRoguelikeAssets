@@ -99,23 +99,15 @@ MonoBehaviour:
   _name: Arm
   _sprite: {fileID: 0}
   type: 0
-  status:
-    maxHP: 0
-    attack: 0
-    defense: 0
-    secure: 0
-    speed: 0
-    hacking: 0
-    luck: 0
-  statusMagnify:
-    maxHP: 0
-    attack: 0
-    defense: 0
-    secure: 0
-    speed: 0
-    hacking: 0
-    luck: 0
-  chipPrefabs:
-  - {fileID: -1394052574880823022, guid: 7b61b521519bcf34da71046d68c86e75, type: 3}
-  socketCount: 0
-  powerGenMulti: 0
+  skillPrefabs:
+  - {fileID: -2982372751357950745, guid: b3f55b1924d4b8a4faf067e7ac94ca11, type: 3}
+  socketCount: 1
+  powerGenMulti: 1
+  ability:
+    attackIncrese: 0
+    attackMulti: 0
+    damageReduce: 0
+    damageMulti: 0
+  itemStatus:
+    hp: 0
+    shield: 0

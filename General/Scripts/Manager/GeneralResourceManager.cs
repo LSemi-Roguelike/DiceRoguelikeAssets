@@ -10,7 +10,7 @@ namespace LSemiRoguelike
         public static GeneralResourceManager manager = null;
 
         [SerializeField] private List<BaseUnit> units;
-        [SerializeField] private List<BaseItem> items;
+        //[SerializeField] private List<BaseItem> items;
 
         private void Awake()
         {
@@ -26,9 +26,9 @@ namespace LSemiRoguelike
             return manager.units.Find((x) => { return x.ID == id; });
         }
 
-        public static BaseItem GetItemByID(uint id)
-        {
-            return manager.items.Find((x) => { return x.ID == id; });
-        }
+        //public static BaseItem GetItemByID(uint id)
+        //{
+        //    return manager.items.Find((x) => { return x.ID == id; });
+        //}
     }
 }

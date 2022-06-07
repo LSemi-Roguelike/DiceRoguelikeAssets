@@ -98,15 +98,14 @@ MonoBehaviour:
   _id: 0
   _name: Gun
   _sprite: {fileID: 0}
-  status:
+  _ability:
+    attackIncrese: 0
+    attackMulti: 0
+    damageReduce: 0
+    damageMulti: 0
+  _status:
     hp: 0
     shield: 0
-    power: 0
-  _unitAction:
-    range:
-      rangeType: 2
-      minRange: 0
-      maxRange: 3
-      ignoreBlocked: 0
-    skill: {fileID: 7383512993328325396, guid: be7f6f1e1fdb6e64e8a5d7bd14b598f0, type: 3}
-    sprite: {fileID: 0}
+  socketCount: 1
+  skillPrefabs:
+  - {fileID: 7383512993328325396, guid: 3600d7d0f8f5f0d4eb73230dfa8c9e6e, type: 3}

@@ -98,4 +98,14 @@ MonoBehaviour:
   _id: 0
   _name: Ring
   _sprite: {fileID: 0}
-  skillPrefab: {fileID: -8583386272399321139, guid: c4f858b1a7947f648b6a69aa23aae62f, type: 3}
+  _ability:
+    attackIncrese: 0
+    attackMulti: 0
+    damageReduce: 0
+    damageMulti: 0
+  _status:
+    hp: 0
+    shield: 0
+  socketCount: 1
+  skillPrefabs:
+  - {fileID: -8583386272399321139, guid: c4f858b1a7947f648b6a69aa23aae62f, type: 3}

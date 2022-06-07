@@ -11,16 +11,17 @@ namespace LSemiRoguelike
         [SerializeField] private DiceObject dicePrefab;
         [SerializeField] private float height = 1, width = 5, throwTime = 1;
 
-        private DiceUnit owner;
+        private PlayerUnit owner;
         private Weapon weapon;
         private int power;
-        private System.Action<List<UnitAction>> returnAction;
+        private System.Action<List<MainSkill>> returnAction;
 
-        public void Init(DiceUnit owner, Weapon weaponAction, System.Action<List<UnitAction>> action)
+        public void Init(PlayerUnit owner, Weapon weaponAction, System.Action<List<MainSkill>> action)
         {
             this.owner = owner;
             this.weapon = weaponAction;
             returnAction = action;
+            dices.ForEach((d) => d.Init(owner));
         }
 
         public void GetActions(int power)
@@ -58,7 +59,7 @@ namespace LSemiRoguelike
 
             var count = diceObjects.Length;
             var interval = width / (count + 1);
-            var results = new List<UnitAction>();
+            var results = new List<MainSkill>();
 
             for (int i = 0; i < count; i++)
             {
@@ -71,7 +72,7 @@ namespace LSemiRoguelike
 
             yield return new WaitUntil(() => results.Count == useDice.Count);
             if (weaponUse)
-                results.Add(weapon.unitAction);
+                results.Add(weapon.skills[0]);
             returnAction(results);
             foreach (var obj in diceObjects)
             {

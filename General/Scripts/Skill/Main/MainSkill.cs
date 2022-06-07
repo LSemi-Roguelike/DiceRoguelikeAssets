@@ -6,12 +6,8 @@ namespace LSemiRoguelike
 {
     public abstract class MainSkill : BaseSkill
     {
-        public static MainSkill Movement => null;
-        public static int MoveCost(Range range)
-        {
-            return range.maxRange;
-        }
+        public Range range;
         public int targetLayer;
-        public abstract IEnumerator Cast(BaseUnit caster, BaseContainer target);
+        public abstract IEnumerator Cast(BaseContainer target);
     }
 }

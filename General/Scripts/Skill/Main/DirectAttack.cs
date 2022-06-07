@@ -7,10 +7,10 @@ public class DirectAttack : MainSkill
     [SerializeField] private Effect effect;
     [SerializeField] private GameObject vfxPrefab;
     [SerializeField] private AudioClip sfxClip;
-    public override IEnumerator Cast(BaseUnit caster, BaseContainer target)
+    public override IEnumerator Cast(BaseContainer target)
     {
         var finalEffect = effect;
-        finalEffect = caster.SetEffect(finalEffect);
+        finalEffect = _caster.SetEffect(finalEffect);
         Instantiate(vfxPrefab, target.Pos, vfxPrefab.transform.rotation);
         target.GetEffect(finalEffect);
         yield break;

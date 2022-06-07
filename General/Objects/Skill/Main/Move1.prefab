@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5748884598425700174}
-  - component: {fileID: 5815759009385987979}
+  - component: {fileID: -8752531285716693698}
   m_Layer: 0
-  m_Name: Main_1 3
+  m_Name: Move1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -31,7 +31,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5815759009385987979
+--- !u!114 &-8752531285716693698
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -40,13 +40,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 6148014880511015911}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a0542eecc7fafa1449fc457a24e76cb6, type: 3}
+  m_Script: {fileID: 11500000, guid: 71452b4e00707284ca9a98ca1d5d9095, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _grade: 0
-  _range:
-    rangeType: 2
+  _sprite: {fileID: 0}
+  range:
+    rangeType: 0
     minRange: 0
     maxRange: 3
     ignoreBlocked: 0
-  effectPrefab: {fileID: 100006, guid: 892393e8e61fdae449205d438c37129c, type: 3}
+  targetLayer: 0

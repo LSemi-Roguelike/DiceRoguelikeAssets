@@ -5,10 +5,10 @@ using LSemiRoguelike;
 
 public class Sub_1 : SubSkill
 {
-    public override IEnumerator Cast(BaseContainer owner, float power)
+    protected override IEnumerator Cast()
     {
-        Debug.Log(owner.Name + " Sub_1");
+        Debug.Log(_caster.Name + " Sub_1");
 
-        yield return new WaitForSeconds(0.5f);
+        yield break;
     }
 }

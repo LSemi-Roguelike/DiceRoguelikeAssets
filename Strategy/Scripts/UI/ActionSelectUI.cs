@@ -1,7 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using LSemiRoguelike.Strategy;
 
 public class ActionSelectUI : MonoBehaviour
@@ -10,7 +8,6 @@ public class ActionSelectUI : MonoBehaviour
     public static ActionSelectUI inst => _inst;
 
     [SerializeField] private UnitActionUI prefab;
-    //[SerializeField] private GameObject pannel;
     float width = Screen.width;
     UnitActionUI[] infoUIs;
 
@@ -19,7 +16,7 @@ public class ActionSelectUI : MonoBehaviour
         _inst = this;
     }
 
-    public void SetActionUI(List<StrategeAction> actions, System.Action<int> returnAction)
+    public void SetActionUI(List<StrategyAction> actions, System.Action<int> returnAction)
     {
         float xInterval = width / (actions.Count + 1);
         infoUIs = new UnitActionUI[actions.Count];
@@ -36,7 +33,6 @@ public class ActionSelectUI : MonoBehaviour
                 SelectEnd();
             });
         }
-        //pannel.SetActive(true);
     }
 
     private void SelectEnd()
@@ -46,6 +42,5 @@ public class ActionSelectUI : MonoBehaviour
             Destroy(uis.gameObject);
         }
         infoUIs = new UnitActionUI[] { };
-        //pannel.SetActive(false);
     }
 }
