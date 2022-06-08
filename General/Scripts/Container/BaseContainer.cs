@@ -12,7 +12,7 @@ namespace LSemiRoguelike
         [SerializeField] protected BaseUnit _unit;          //άβ?
         [SerializeField] protected UnitStatusUI _statusUI;  //UI
 
-        public BaseUnit unit => _unit;
+        public BaseUnit Unit => _unit;
 
         public uint ID => _id;
 
@@ -23,7 +23,7 @@ namespace LSemiRoguelike
         public virtual void GetEffect(Effect effect)
         {
             _unit.GetEffect(effect);
-            _statusUI.SetUI(_unit.status);
+            SetStatusUI();
         }
 
         public void Init(BaseUnit baseUnit)
@@ -34,15 +34,14 @@ namespace LSemiRoguelike
 
         public virtual void Init()
         {
-            _unit.Init();
-            _unit.container = this;
-            _statusUI.InitUI(_unit.maxStatus);
-            _statusUI.SetUI(_unit.status);
+            _unit.Init(this);
+            _statusUI.InitUI(_unit.MaxStatus);
+            SetStatusUI();
         }
 
         protected virtual void SetStatusUI()
         {
-            _statusUI.SetUI(_unit.status);
+            _statusUI.SetUI(_unit.Status);
         }
     }
 }

@@ -11,6 +11,7 @@ namespace LSemiRoguelike
         public abstract void Attack(float damage);
         public abstract void Move(float movement);
         public abstract void Damaged(float damage);
+        public abstract void Passive();
         public override void GetEffect(Effect effect)
         {
             base.GetEffect(effect);

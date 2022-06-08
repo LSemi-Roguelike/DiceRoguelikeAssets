@@ -21,7 +21,7 @@ namespace LSemiRoguelike
         protected Status buffStatus;
         public DiceManager diceManager { get { return _diceManager; } }
 
-        public override void Init()
+        protected override void Init()
         {
             _diceManager = Instantiate(_diceManager, transform);
             (weapon = Instantiate(weaponPrefab, transform)).Init(this);
@@ -54,7 +54,13 @@ namespace LSemiRoguelike
         {
             bodyParts.PowerGenerate(damage);
         }
-
+        public override void Passive()
+        {
+            foreach (var accessory in accessorys)
+            {
+                accessory.Passive();
+            }
+        }
         public override void SetActionCallback(System.Action<List<MainSkill>> action)
         {
             diceManager.Init(this, weapon, action);

@@ -5,11 +5,11 @@ using LSemiRoguelike.Strategy;
 public class ActionSelectUI : MonoBehaviour
 {
     private static ActionSelectUI _inst;
-    public static ActionSelectUI inst => _inst;
+    public static ActionSelectUI Inst => _inst;
 
     [SerializeField] private UnitActionUI prefab;
-    float width = Screen.width;
-    UnitActionUI[] infoUIs;
+    private readonly float width = Screen.width;
+    private UnitActionUI[] infoUIs;
 
     private void Awake()
     {
@@ -35,7 +35,7 @@ public class ActionSelectUI : MonoBehaviour
         }
     }
 
-    private void SelectEnd()
+    public void SelectEnd()
     {
         foreach (var uis in infoUIs)
         {

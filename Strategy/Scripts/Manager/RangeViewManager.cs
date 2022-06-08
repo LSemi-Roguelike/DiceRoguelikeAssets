@@ -7,9 +7,9 @@ namespace LSemiRoguelike.Strategy
     public class RangeViewManager : MonoBehaviour
     {
         public static RangeViewManager Inst { get; private set; }
-        [SerializeField] GameObject rangePrefab;
-        [SerializeField] int startObjCount;
-        List<GameObject> rangeObjects;
+        [SerializeField] private GameObject rangePrefab;
+        [SerializeField] private int startObjCount;
+        private List<GameObject> rangeObjects;
 
         private void Awake()
         {

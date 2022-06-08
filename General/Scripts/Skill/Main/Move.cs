@@ -9,7 +9,7 @@ namespace LSemiRoguelike
         public override IEnumerator Cast(BaseContainer target) { yield break; }
         public override string ToString()
         {
-            return "Move, Range:" + range;
+            return "Move";
         }
     }
 }

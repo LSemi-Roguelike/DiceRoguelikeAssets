@@ -6,6 +6,12 @@ namespace LSemiRoguelike
 {
     public class Accessory : BaseItem<PassiveSkill>
     {
-
+        public void Passive()
+        {
+            foreach (var skill in skills)
+            {
+                skill.Passive();
+            }
+        }
     }
 }

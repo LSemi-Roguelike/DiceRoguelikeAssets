@@ -207,12 +207,6 @@ namespace LSemiRoguelike.Strategy
 				return;
 			unitTileArray[pos.x + x_anchor][pos.y + y_anchor] = null;
 		}
-		public void RemoveUnit(StrategyUnit unit)
-		{
-			Vector3Int pos = WorldToCell(unit.transform.position);
-			if (unitTileArray[pos.x + x_anchor][pos.y + y_anchor] == unit.gameObject)
-				unitTileArray[pos.x + x_anchor][pos.y + y_anchor] = null;
-		}
 
 		public bool CheckBlocked(Vector3Int pos)
 		{

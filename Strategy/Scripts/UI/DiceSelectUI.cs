@@ -19,6 +19,7 @@ public class DiceSelectUI : MonoBehaviour
     DiceInfoUI[] diceUIs;
     bool[] diceUse;
     bool weaponUse;
+    bool onSelect;
     int maxCost;
     int cost;
 
@@ -31,6 +32,7 @@ public class DiceSelectUI : MonoBehaviour
         weaponBtn.gameObject.SetActive(false);
         acceptBtn.gameObject.SetActive(false);
         costTxt.gameObject.SetActive(false);
+        onSelect = false;
     }
 
     public void SetDiceUI(List<Dice> dices, Weapon weapon, int maxCost, System.Action<bool[], bool> accept)
@@ -69,6 +71,8 @@ public class DiceSelectUI : MonoBehaviour
         }
         pos.x = (dices.Count + 2) * xInterval;
         acceptBtn.transform.localPosition = pos;
+        onSelect = true;
+        StartCoroutine(OnSelectCo());
     }
 
     public void InitWeaponBtn()
@@ -90,12 +94,22 @@ public class DiceSelectUI : MonoBehaviour
             }
             SetCostText();
         });
-
     }
 
-    public void SetWeaponInfo()
+    public IEnumerator OnSelectCo()
     {
-
+        while (onSelect)
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                if (weaponUse) weaponBtn.onClick.Invoke();
+                diceUse = null;
+                cost = 0;
+                Accept();
+                yield break;
+            }
+            yield return null;
+        }
     }
 
     void SetCostText()
@@ -109,16 +123,15 @@ public class DiceSelectUI : MonoBehaviour
 
     public void Accept()
     {
+        if (cost > maxCost)
+            return;
         accept(diceUse, weaponUse);
-    }
-
-    public void Permit()
-    {
+        onSelect = false;
         foreach (var uis in diceUIs)
         {
             Destroy(uis.gameObject);
         }
-        if(weaponUse)
+        if (weaponUse)
             weaponBtn.onClick.Invoke();
         weaponBtn.gameObject.SetActive(false);
         acceptBtn.gameObject.SetActive(false);

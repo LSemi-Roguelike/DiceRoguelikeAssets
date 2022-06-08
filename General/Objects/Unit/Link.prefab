@@ -90,7 +90,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5163074973281878148}
-  - component: {fileID: 5163074973281878149}
   - component: {fileID: 7103342306540626436}
   m_Layer: 8
   m_Name: Link
@@ -114,20 +113,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!64 &5163074973281878149
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5163074973281878151}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!114 &7103342306540626436
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -145,8 +130,8 @@ MonoBehaviour:
   _maxStatus:
     hp: 10
     shield: 0
-  _ability:
-    attackAdd: 0
+  _initAbility:
+    attackIncrese: 0
     attackMulti: 0
     damageReduce: 0
     damageMulti: 0
@@ -168,6 +153,9 @@ MonoBehaviour:
       duration: 0
     wet: 0
     oiled: 0
+  _renderer: {fileID: 6437374635225953063}
+  _sprite: {fileID: 21300000, guid: 001fe1b0dd1359841b88ffc554bbb1d8, type: 3}
+  _diceManager: {fileID: -2826289021842819171, guid: 00b839d3e87d5fc4890dcf68ddf91b11, type: 3}
   maxPower: 3
   weaponPrefab: {fileID: -3935503393781002923, guid: edfbc9270c3f21248b21df73f2ee9fce, type: 3}
   armPartsPrefab: {fileID: -7351224460041336507, guid: 8db74a571663b0149ad6533a079cc117, type: 3}
@@ -175,4 +163,3 @@ MonoBehaviour:
   bodyPartsPrefab: {fileID: -7351224460041336507, guid: 42012d9268671964e859e37a94d0bf39, type: 3}
   accessoryPrefabs:
   - {fileID: -8528068978931958277, guid: 1403de1f5b063e5488a601d1df477e27, type: 3}
-  _diceManager: {fileID: -2826289021842819171, guid: 00b839d3e87d5fc4890dcf68ddf91b11, type: 3}

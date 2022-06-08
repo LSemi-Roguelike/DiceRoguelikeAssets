@@ -1,0 +1,78 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5647451472373244548
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1824761956372956707}
+  - component: {fileID: 7032359229029728129}
+  m_Layer: 0
+  m_Name: SelfEffect
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1824761956372956707
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5647451472373244548}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.572368, y: -5.5222673, z: 18.256723}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7032359229029728129
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5647451472373244548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68ac328def624674a9c6be10bc7e9285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _grade: 1
+  _sprite: {fileID: 0}
+  _cost: 1
+  _effect:
+    effectType: 2
+    status:
+      hp: 999
+      shield: 999
+    power: 0
+    condition:
+      burn:
+        grade: 0
+        duration: 0
+      poison:
+        grade: 0
+        duration: 0
+      frozen:
+        grade: 0
+        duration: 0
+      shock:
+        grade: 0
+        duration: 0
+      recovery:
+        grade: 0
+        duration: 0
+      wet: 0
+      oiled: 0
+    ability:
+      attackIncrese: 0
+      attackMulti: 0
+      damageReduce: 0
+      damageMulti: 0
+    knockback: {x: 0, y: 0, z: 0}

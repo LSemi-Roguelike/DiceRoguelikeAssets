@@ -5,29 +5,33 @@ using UnityEngine;
 
 namespace LSemiRoguelike.Strategy
 {
-    public abstract class StrategyUnit : StrategyContainer
+    public abstract class StrategyActingUnit : StrategyContainer
     {
         protected enum ActType { WaitAction, SelectAction, SelectTarget, TurnEnd }
         protected ActType nowAct;
 
         [HideInInspector] public int turnCount;
-        public new ActingUnit unit { get { return base.unit as ActingUnit; } }
+        public new ActingUnit Unit { get { return base.Unit as ActingUnit; } }
         
         protected int turnPoint;
-        protected bool _onTurn;
+        private bool _onTurn;
         public bool OnTurn => _onTurn;
-        public bool isDead => unit.IsDead;
+        public bool isDead => Unit.IsDead;
 
         public override void Init()
         {
             base.Init();
             ResetTurnCount();
+            Unit.SetActionCallback(SetActions);
         }
 
 
+        protected abstract void SetActions(List<MainSkill> actions);
         protected abstract void TurnStart();
+        protected abstract void WaitAction();
+        protected abstract void SelectAction();
+        protected abstract void SelectTarget();
         protected abstract void TurnEnd();
-        protected abstract void TurnUpdate();
 
         public IEnumerator GetTurn()
         {
@@ -35,7 +39,23 @@ namespace LSemiRoguelike.Strategy
             TurnStart();
             while (OnTurn)
             {
-                TurnUpdate();
+                switch (nowAct)
+                {
+                    case ActType.WaitAction:
+                        WaitAction();
+                        break;
+                    case ActType.SelectAction:
+                        SelectAction();
+                        break;
+                    case ActType.SelectTarget:
+                        SelectTarget();
+                        break;
+                    case ActType.TurnEnd:
+                        _onTurn = false;
+                        break;
+                    default:
+                        break;
+                }
                 yield return null;
             }
             TurnEnd();
@@ -90,7 +110,7 @@ namespace LSemiRoguelike.Strategy
         {
             yield return StartCoroutine(skill.Cast(target));
             nowAct = ActType.SelectAction;
-            _statusUI.SetUI(_unit.status);
+            _statusUI.SetUI(_unit.Status);
         }
 
         protected IEnumerator MoveTo(List<Vector3> moveRoute)
@@ -111,7 +131,7 @@ namespace LSemiRoguelike.Strategy
                 yield return null;
             }
             nowAct = ActType.SelectAction;
-            _statusUI.SetUI(_unit.status);
+            _statusUI.SetUI(_unit.Status);
         }
         protected void ResetTurnCount()
         {
@@ -121,7 +141,7 @@ namespace LSemiRoguelike.Strategy
 
         protected void Death()
         {
-            unit.gameObject.GetComponent<Renderer>().enabled = false;
+            Unit.gameObject.GetComponent<Renderer>().enabled = false;
             TurnManager.manager.RemoveUnit(this);
         }
 

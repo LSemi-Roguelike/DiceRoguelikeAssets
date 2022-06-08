@@ -32,16 +32,14 @@ namespace LSemiRoguelike
 
         public void GetSelected(bool[] diceUse, bool weaponUse)
         {
-            int cost = weaponUse ? 1 : 0;
-            foreach (var use in diceUse)
-                if (use) cost++;
-            if (cost > power)
+            if (diceUse == null && !weaponUse)
+            {
+                returnAction(new List<MainSkill>());
                 return;
-
-            DiceSelectUI.inst.Permit();
+            }
 
             var useDice = new List<Dice>();
-            for (int i = 0; i < dices.Count; i++)
+            for (int i = 0; i < diceUse.Length; i++)
             {
                 if (diceUse[i]) useDice.Add(dices[i]);
             }

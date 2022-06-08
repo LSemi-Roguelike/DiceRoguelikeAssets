@@ -7,15 +7,15 @@ namespace LSemiRoguelike
     public abstract class PassiveSkill : BaseSkill
     {
         [SerializeField] private int _cost;
-        private int nowTurn;
+        private int count;
 
-        public void GetTurn()
+        public void Passive()
         {
-            nowTurn++;
-            if (nowTurn == _cost)
+            count++;
+            if (count >= _cost)
             {
                 StartCoroutine(Cast());
-                nowTurn = 0;
+                count -= _cost;
             }
         }
 

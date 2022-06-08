@@ -8,8 +8,8 @@ namespace LSemiRoguelike.Strategy
     public class TurnManager : MonoBehaviour
     {
         public static TurnManager manager;
-        List<StrategyUnit> units;
-        StrategyUnit turnUnit;
+        List<StrategyActingUnit> units;
+        StrategyActingUnit turnUnit;
         Coroutine nowCo;
 
         private void Awake()
@@ -24,10 +24,10 @@ namespace LSemiRoguelike.Strategy
 
         public void Init()
         {
-            units = new List<StrategyUnit>();
+            units = new List<StrategyActingUnit>();
             for (int i = 0; i < transform.childCount; i++)
             {
-                var temp = transform.GetChild(i).GetComponent<StrategyUnit>();
+                var temp = transform.GetChild(i).GetComponent<StrategyActingUnit>();
                 if (temp != null)
                     units.Add(temp);
             }
@@ -71,7 +71,7 @@ namespace LSemiRoguelike.Strategy
             GiveTurn();
         }
 
-        public void GiveQuickTurn(StrategyUnit nextUnit)
+        public void GiveQuickTurn(StrategyActingUnit nextUnit)
         {
             nextUnit.turnCount = 0;
             units.Remove(nextUnit);
@@ -120,7 +120,7 @@ namespace LSemiRoguelike.Strategy
             ViewPointMove.Inst?.ResetParent();
         }
 
-        public void RemoveUnit(StrategyUnit unit)
+        public void RemoveUnit(StrategyActingUnit unit)
         {
             if (unit == units![0])
             {
