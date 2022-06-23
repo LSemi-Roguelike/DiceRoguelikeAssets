@@ -32,16 +32,14 @@ namespace LSemiRoguelike
         protected Status _status;
         protected Ability _ability;
         protected Condition _condition;
-
-        public Status Status => _status;
-        public Status MaxStatus => _maxStatus;
-
         protected BaseContainer _container;
-        public BaseContainer Container
-        {
-            get { return _container; }
-            set { if (!_container) _container = value; }
-        }
+
+        public Status TotalStatus => _status;
+        public Status MaxStatus => _maxStatus;
+        public Ability TotalAbility => _ability;
+        public Condition TotalCondition => _condition;
+        public BaseContainer Container => _container;
+
 
         public void Init(BaseContainer container)
         {
@@ -76,32 +74,38 @@ namespace LSemiRoguelike
 
         public virtual void GetEffect(Effect effect)
         {
-            _status.shield += effect.status.shield;
-            _status.shield = _status.shield > MaxStatus.shield ? MaxStatus.shield : _status.shield;
-            _status.shield = _status.shield < 0 ? 0 : _status.shield;
-
-            if (effect.status.hp < 0)
+            Effect finalEffect = new Effect();
+            //status
             {
-                _status.shield += effect.status.hp;
-                if (_status.shield < 0)
+                var beforeSts = _status;
+                _status.shield += effect.status.shield;
+                _status.shield = _status.shield > MaxStatus.shield ? MaxStatus.shield : _status.shield;
+                _status.shield = _status.shield < 0 ? 0 : _status.shield;
+
+                if (effect.status.hp < 0)
                 {
-                    _status.hp += _status.shield;
-                    _status.shield = 0;
+                    var dmg = (effect.status.hp + _ability.damageReduce) * _ability.damageMulti;
+                    _status.shield += dmg < 0 ? dmg : -1;
+                    if (_status.shield < 0)
+                    {
+                        _status.hp += _status.shield;
+                        _status.shield = 0;
+                    }
                 }
+                else if (effect.status.hp > 0)
+                {
+                    _status.hp += effect.status.hp;
+                    if (_status.hp > _maxStatus.hp)
+                        _status.hp = _maxStatus.hp;
+                }
+                finalEffect.status = beforeSts - _status;
             }
-            else if (effect.status.hp > 0)
+            //Condition
             {
-                _status.hp += effect.status.hp;
-                if (_status.hp > _maxStatus.hp)
-                    _status.hp = _maxStatus.hp;
+
             }
-            GetConditionEffect(effect.condition);
         }
 
-        protected virtual void GetConditionEffect(Condition effect)
-        {
-
-        }
 
         [MenuItem("GameObject/Dice Rogue Like/Base Unit", false, 10)]
         static void CreateBaseUnit(MenuCommand menuCommand)

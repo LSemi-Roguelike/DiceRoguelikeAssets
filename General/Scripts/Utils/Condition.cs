@@ -14,17 +14,20 @@ namespace LSemiRoguelike
             {
                 return $"({grade}, {duration})";
             }
+            public Info(uint grade, uint duration) { this.grade = grade; this.duration = duration; }
+            public static Info operator +(Info a, Info b) => new Info(a.grade + b.grade, a.duration + b.duration);
+            public static Info operator -(Info a, Info b) => new Info(a.grade - b.grade, a.duration - b.duration);
         }
 
         public Info burn;       //unstackable   damage
         public Info poison;     //stackable     damage
-        public Info frozen;     //
+        public Info frozen;     //increase damage, decrease attack
         public Info shock;      //power down (if power < shock stun)
         
         public Info recovery;   //heal
 
-        public uint wet;        //increase: frozen, shock   /   reduce: burn, poison
-        public uint oiled;      //increase: burn, poison    /   reduce: frozen, shock
+        public bool wet;        //increase: frozen, shock   /   reduce: burn, poison
+        public bool oiled;      //increase: burn, poison    /   reduce: frozen, shock
 
         public override string ToString()
         {
@@ -36,13 +39,34 @@ namespace LSemiRoguelike
                 if (infos[i].duration > 0)
                     str += names[i] + infos[i]+ ",";
             }
-            if (wet != 0)
-                str += "wet: " + wet + ",";
-            if (oiled != 0)
-                str += "oiled: " + oiled + ",";
+            if (wet)
+                str += "wet,";
+            if (oiled)
+                str += "oiled,";
 
             str = str.Substring(0, str.Length - 1);
             return str;
+        }
+
+        public static Condition operator +(Condition a, Condition b)
+        {
+            a.wet |= b.wet;
+            a.oiled |= b.oiled;
+            
+            //burn
+            if (b.burn.grade < 0)
+            {
+                a.burn.grade -= -b.burn.grade > a.burn.grade ? 0 : a.burn.grade - b.burn.grade;
+            }
+            else if (a.burn.grade < b.burn.grade)
+            {
+                a.burn = b.burn;
+            }
+
+            //a.poison.grade += b.poison.grade;
+            //a.poison.grade
+
+            return a;
         }
     }
 }

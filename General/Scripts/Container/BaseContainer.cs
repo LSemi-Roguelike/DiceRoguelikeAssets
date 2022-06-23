@@ -9,8 +9,8 @@ namespace LSemiRoguelike
         [SerializeField] protected uint _id;
         [SerializeField] protected string _name;
         
-        [SerializeField] protected BaseUnit _unit;          //Üâ?
-        [SerializeField] protected UnitStatusUI _statusUI;  //UI
+        [SerializeField] protected BaseUnit _unit;          //«æ«Ë«Ã«È
+        [SerializeField] protected UnitStatusUI _statusUI;  //«¹«Æ?«¿«¹
 
         public BaseUnit Unit => _unit;
 
@@ -20,18 +20,7 @@ namespace LSemiRoguelike
 
         public Vector3 Pos => transform.position;
 
-        public virtual void GetEffect(Effect effect)
-        {
-            _unit.GetEffect(effect);
-            SetStatusUI();
-        }
-
-        public void Init(BaseUnit baseUnit)
-        {
-            _unit = baseUnit;
-            Init();
-        }
-
+        //ôøÑ¢ûù
         public virtual void Init()
         {
             _unit.Init(this);
@@ -39,9 +28,17 @@ namespace LSemiRoguelike
             SetStatusUI();
         }
 
+        //«À«á?«¸£üüÞÜÖªÎ?×â
+        public virtual void GetEffect(Effect effect)
+        {
+            _unit.GetEffect(effect);
+            SetStatusUI();
+        }
+
+        //UIÌÚãæ
         protected virtual void SetStatusUI()
         {
-            _statusUI.SetUI(_unit.Status);
+            _statusUI.SetUI(_unit.TotalStatus);
         }
     }
 }

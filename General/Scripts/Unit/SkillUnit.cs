@@ -11,6 +11,8 @@ namespace LSemiRoguelike
         [SerializeField] List<SubSkill> attSubPrefabs, moveSubPrefabs, dmgSubPrefabs;
         [SerializeField] List<PassiveSkill> passivePrefabs;
 
+        [SerializeField] float attPowerGen = 1f, movePowerGen = 1f, dmgPowerGen = 1f;
+
         List<MainSkill> _mainSkills;
         List<SubSkill> _attSub, _moveSub, _dmgSub;
         List<PassiveSkill> _passive;
@@ -38,21 +40,20 @@ namespace LSemiRoguelike
             _passive.ForEach((s) => s.Init(this));
 
             base.Init();
-            Debug.Log(_passive.Count);
         }
 
-        public override void Attack(float damage)
+        public override void Attack()
         {
-            _attSub.ForEach((s) => s.SupplyPower(damage));
+            _attSub.ForEach((s) => s.SupplyPower(attPowerGen));
         }
-        public override void Move(float movement)
+        public override void Move()
         {
-            _moveSub.ForEach((s) => s.SupplyPower(movement));
+            _moveSub.ForEach((s) => s.SupplyPower(movePowerGen));
         }
 
-        public override void Damaged(float damage)
+        protected override void Damaged()
         {
-            _dmgSub.ForEach((s) => s.SupplyPower(damage));
+            _dmgSub.ForEach((s) => s.SupplyPower(dmgPowerGen));
         }
 
         public override void Passive()
@@ -60,7 +61,7 @@ namespace LSemiRoguelike
             _passive.ForEach((s) => s.Passive());
         }
 
-        public override void GetAction()
+        public override void GetSkill()
         {
             actionCallBacck(_mainSkills);
         }

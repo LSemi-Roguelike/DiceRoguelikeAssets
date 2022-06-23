@@ -40,19 +40,19 @@ namespace LSemiRoguelike
             base.Init();
         }
 
-        public override void Attack(float damage)
+        public override void Attack()
         {
-            armParts.PowerGenerate(damage);
+            armParts.PowerGenerate();
         }
 
-        public override void Move(float movement)
+        public override void Move()
         {
-            legParts.PowerGenerate(movement);
+            legParts.PowerGenerate();
         }
 
-        public override void Damaged(float damage)
+        protected override void Damaged()
         {
-            bodyParts.PowerGenerate(damage);
+            bodyParts.PowerGenerate();
         }
         public override void Passive()
         {
@@ -66,7 +66,7 @@ namespace LSemiRoguelike
             diceManager.Init(this, weapon, action);
         }
 
-        public override void GetAction()
+        public override void GetSkill()
         {
             diceManager.GetActions(power);
         }

@@ -10,22 +10,11 @@ namespace LSemiRoguelike.Strategy
         public new PlayerUnit Unit => base.Unit as PlayerUnit;
 
         protected int _selectedAction;
-        protected List<StrategyAction> _actions;
 
         public override void Init()
         {
             base.Init();
 
-        }
-
-        protected override void SetActions(List<MainSkill> actions)
-        {
-            _actions = new List<StrategyAction>();
-            for(int i = 0; i < actions.Count; i++)
-            {
-                _actions.Add(new StrategyAction(actions[i], cellPos));
-            }
-            nowAct = ActType.SelectAction;
         }
 
         private void SelectAction(int actNum)
@@ -36,8 +25,7 @@ namespace LSemiRoguelike.Strategy
 
         protected override void TurnStart()
         {
-            nowAct = ActType.WaitAction;
-            Unit.GetAction();
+
         }
 
         protected override void WaitAction()

@@ -11,10 +11,12 @@ namespace LSemiRoguelike.Strategy
         protected ActType nowAct;
 
         [HideInInspector] public int turnCount;
-        public new ActingUnit Unit { get { return base.Unit as ActingUnit; } }
-        
+
+        protected List<StrategyAction> _actions;
         protected int turnPoint;
         private bool _onTurn;
+
+        public new ActingUnit Unit { get { return base.Unit as ActingUnit; } }
         public bool OnTurn => _onTurn;
         public bool isDead => Unit.IsDead;
 
@@ -26,7 +28,15 @@ namespace LSemiRoguelike.Strategy
         }
 
 
-        protected abstract void SetActions(List<MainSkill> actions);
+        protected void SetActions(List<MainSkill> actions)
+        {
+            _actions = new List<StrategyAction>();
+            for (int i = 0; i < actions.Count; i++)
+            {
+                _actions.Add(new StrategyAction(actions[i], cellPos));
+            }
+            nowAct = ActType.SelectAction;
+        }
         protected abstract void TurnStart();
         protected abstract void WaitAction();
         protected abstract void SelectAction();
@@ -36,7 +46,12 @@ namespace LSemiRoguelike.Strategy
         public IEnumerator GetTurn()
         {
             _onTurn = true;
+            nowAct = ActType.WaitAction;
+
+            Unit.Passive();
             TurnStart();
+            Unit.GetSkill();
+
             while (OnTurn)
             {
                 switch (nowAct)
@@ -51,6 +66,7 @@ namespace LSemiRoguelike.Strategy
                         SelectTarget();
                         break;
                     case ActType.TurnEnd:
+                        TurnEnd();
                         _onTurn = false;
                         break;
                     default:
@@ -58,7 +74,6 @@ namespace LSemiRoguelike.Strategy
                 }
                 yield return null;
             }
-            TurnEnd();
             ResetTurnCount();
             TurnManager.manager.TurnRotate();
         }
@@ -109,8 +124,8 @@ namespace LSemiRoguelike.Strategy
         protected IEnumerator SkillCast(MainSkill skill, StrategyContainer target)
         {
             yield return StartCoroutine(skill.Cast(target));
+            Unit.Attack();
             nowAct = ActType.SelectAction;
-            _statusUI.SetUI(_unit.Status);
         }
 
         protected IEnumerator MoveTo(List<Vector3> moveRoute)
@@ -130,13 +145,12 @@ namespace LSemiRoguelike.Strategy
                 }
                 yield return null;
             }
+            Unit.Move();
             nowAct = ActType.SelectAction;
-            _statusUI.SetUI(_unit.Status);
         }
         protected void ResetTurnCount()
         {
             turnCount = 10;
-            //turnCount = Utils.GetTurnCount(unit.totalStatus.power);
         }
 
         protected void Death()

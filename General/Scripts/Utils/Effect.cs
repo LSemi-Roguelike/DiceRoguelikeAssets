@@ -15,8 +15,6 @@ namespace LSemiRoguelike
         public Status status;
         //hp : heal / damage
         //shield : charge/ damage
-        public int power;
-        ////power : power charge / discharge
 
         //conditions
         public Condition condition;
@@ -33,7 +31,6 @@ namespace LSemiRoguelike
             this.condition = condition;
             this.ability = ability;
             this.knockback = knockback;
-            power = 0;
         }
     }
 }

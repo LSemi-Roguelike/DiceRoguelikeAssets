@@ -9,15 +9,15 @@ namespace LSemiRoguelike
         public enum PartsType { ARM, LEG, BODY }
 
         [SerializeField] protected PartsType type;
-        [SerializeField] protected float powerGenMulti = 1f;
+        [SerializeField] protected float powerGen = 1f;
 
         public PartsType GetPartsType() { return type; }
 
-        public void PowerGenerate(float power)
+        public void PowerGenerate()
         {
             foreach (var skill in skills)
             {
-                skill.SupplyPower(power * powerGenMulti);
+                skill.SupplyPower(powerGen);
             }
         }
     }

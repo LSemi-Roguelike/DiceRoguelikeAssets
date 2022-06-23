@@ -7,15 +7,15 @@ namespace LSemiRoguelike
     public abstract class ActingUnit : BaseUnit
     {
         public abstract void SetActionCallback(System.Action<List<MainSkill>> action);
-        public abstract void GetAction();
-        public abstract void Attack(float damage);
-        public abstract void Move(float movement);
-        public abstract void Damaged(float damage);
+        public abstract void GetSkill();
+        public abstract void Attack();
+        public abstract void Move();
+        protected abstract void Damaged();
         public abstract void Passive();
         public override void GetEffect(Effect effect)
         {
             base.GetEffect(effect);
-            Damaged(effect.status.hp);
+            Damaged();
         }
     }
 }

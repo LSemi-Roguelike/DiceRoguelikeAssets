@@ -56,18 +56,9 @@ namespace LSemiRoguelike.Strategy
             {
                 return;
             }
-            var flag = false;
-            for (int i = 0; i < units.Count; i++)
-            {
-                if (units[i].turnCount > turnUnit.turnCount)
-                {
-                    units.Insert(i, turnUnit);
-                    flag = true;
-                    break;
-                }
-            }
-            if(!flag)
-                units.Add(turnUnit);
+            int i = 0;
+            for (; i < units.Count && units[i].turnCount <= turnUnit.turnCount; i++) ;
+            units.Insert(i, turnUnit);
             GiveTurn();
         }
 
